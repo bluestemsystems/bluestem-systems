@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bluestem — Operations & Documentation for Small Businesses</title>
+  <meta name="description" content="Bluestem builds the systems and writes the documents small businesses need but never have time to create.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1c1c1a;
+      --ink-mid: #5a5a56;
+      --ink-light: #9a9a94;
+      --paper: #f7f5f0;
+      --paper-mid: #eeebe4;
+      --rule: rgba(28,28,26,0.12);
+      --rule-mid: rgba(28,28,26,0.22);
+      --accent: #3a6b3a;
+      --serif: 'Libre Baskerville', Georgia, serif;
+      --mono: 'DM Mono', 'Courier New', monospace;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--serif); background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; }
+    .wrap { max-width: 680px; margin: 0 auto; padding: 0 2rem; }
+    nav { padding: 2rem 0 1.75rem; border-bottom: 0.5px solid var(--rule); margin-bottom: 4rem; display: flex; justify-content: space-between; align-items: baseline; }
+    .wordmark { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+    .nav-links { list-style: none; display: flex; gap: 1.75rem; }
+    .nav-links a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--ink); }
+    .hero { margin-bottom: 4.5rem; }
+    .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 1.25rem; }
+    h1 { font-family: var(--serif); font-size: clamp(22px, 4vw, 30px); font-weight: 700; line-height: 1.3; margin-bottom: 1.5rem; max-width: 540px; }
+    .subhead { font-size: 17px; font-style: italic; color: var(--ink-mid); line-height: 1.75; max-width: 480px; margin-bottom: 2.25rem; }
+    .cta-btn { display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink); border: 0.5px solid var(--rule-mid); padding: 11px 22px; text-decoration: none; background: transparent; transition: background 0.15s; cursor: pointer; }
+    .cta-btn:hover { background: var(--paper-mid); }
+    .rule { border: none; border-top: 0.5px solid var(--rule); margin: 3.5rem 0; }
+    .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 2rem; }
+    .service { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start; padding: 1.75rem 0; border-bottom: 0.5px solid var(--rule); }
+    .service:first-of-type { border-top: 0.5px solid var(--rule); }
+    .service-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.4rem; }
+    .service-name { font-size: 18px; font-weight: 700; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; border: 0.5px solid var(--rule-mid); padding: 2px 7px; color: var(--ink-mid); font-weight: 400; white-space: nowrap; }
+    .service-desc { font-size: 14px; font-style: italic; color: var(--ink-mid); line-height: 1.65; margin-bottom: 0.6rem; }
+    .service-includes { font-family: var(--mono); font-size: 11px; color: var(--ink-light); letter-spacing: 0.02em; }
+    .service-price { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--ink); white-space: nowrap; padding-top: 1.8rem; }
+    .about p { font-size: 15px; font-style: italic; color: var(--ink-mid); line-height: 1.8; max-width: 500px; }
+    .contact-intro { font-size: 15px; font-style: italic; color: var(--ink-mid); margin-bottom: 2rem; line-height: 1.75; }
+    .form-row { margin-bottom: 1.25rem; }
+    label { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mid); margin-bottom: 0.4rem; }
+    input, textarea, select { width: 100%; font-family: var(--serif); font-size: 15px; color: var(--ink); background: transparent; border: 0.5px solid var(--rule-mid); padding: 10px 12px; outline: none; transition: border-color 0.15s; appearance: none; border-radius: 0; }
+    input:focus, textarea:focus, select:focus { border-color: var(--ink); }
+    textarea { resize: vertical; min-height: 120px; }
+    .form-submit { margin-top: 1.5rem; }
+    .form-success { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--accent); margin-top: 1rem; display: none; }
+    .form-error { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: #8b3a3a; margin-top: 1rem; display: none; }
+    .cta-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .grass-mark { display: inline-block; width: 3px; height: 18px; background: var(--accent); margin-right: 10px; vertical-align: middle; opacity: 0.6; }
+    footer { margin-top: 4rem; padding: 1.75rem 0 2.5rem; border-top: 0.5px solid var(--rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+    .footer-word { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); }
+    .footer-loc { font-family: var(--mono); font-size: 11px; color: var(--ink-light); letter-spacing: 0.03em; }
+    @media (max-width: 480px) {
+      .wrap { padding: 0 1.25rem; }
+      nav { flex-direction: column; gap: 1rem; }
+      .service { grid-template-columns: 1fr; }
+      .service-price { padding-top: 0; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a href="#" class="wordmark">Bluestem</a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <section class="hero">
+    <p class="eyebrow">Operations &amp; documentation for small businesses</p>
+    <h1><span class="grass-mark"></span>Builds the systems and writes the documents small businesses need but never have time to create.</h1>
+    <p class="subhead">Bluestem helps small business owners simplify how they operate, so the work that matters stops getting buried.</p>
+    <a href="#contact" class="cta-btn">Get in touch ↗</a>
+  </section>
+  <hr class="rule">
+  <section id="services">
+    <p class="section-label">Services</p>
+    <div class="service">
+      <div>
+        <p class="service-tag">Start here</p>
+        <p class="service-name">The Operations Audit <span class="badge">recommended</span></p>
+        <p class="service-desc">A focused look at how your business currently runs. We identify your three biggest friction points and deliver a prioritized written action plan so you know exactly what to fix and in what order.</p>
+        <p class="service-includes">Written report + one hour debrief call</p>
+      </div>
+      <div class="service-price">$200</div>
+    </div>
+    <div class="service">
+      <div>
+        <p class="service-tag">Documentation</p>
+        <p class="service-name">The Starter Handbook</p>
+        <p class="service-desc">Your business's first real employee handbook. Policies, expectations, onboarding basics, and the things that currently live only in your head — written down and ready to use.</p>
+        <p class="service-includes">Complete document, formatted and ready to hand to your team</p>
+      </div>
+      <div class="service-price">$500</div>
+    </div>
+    <div class="service">
+      <div>
+        <p class="service-tag">Process writing</p>
+        <p class="service-name">The SOP Sprint</p>
+        <p class="service-desc">One messy process, made clean. We map how it actually works and I write a repeatable step-by-step document your team can follow without you in the room.</p>
+        <p class="service-includes">One polished SOP document</p>
+      </div>
+      <div class="service-price">$175</div>
+    </div>
+    <div class="service">
+      <div>
+        <p class="service-tag">Automation</p>
+        <p class="service-name">Systems Setup</p>
+        <p class="service-desc">You've got the tools, they're just not talking to each other. I'll connect and configure your existing platforms so your workflow actually flows.</p>
+        <p class="service-includes">Setup, testing, and a short walkthrough doc</p>
+      </div>
+      <div class="service-price">from $250</div>
+    </div>
+  </section>
+  <hr class="rule">
+  <section id="about" class="about">
+    <p class="section-label">About</p>
+    <p>Bluestem is a one-person operation based in Central Texas. I work with small business owners who are good at what they do and overwhelmed by everything else — helping them get out from under their own paperwork so they can get back to the work they actually built the thing for.</p>
+  </section>
+  <hr class="rule">
+  <section id="contact">
+    <p class="section-label">Contact</p>
+    <p class="contact-intro">Not sure which service fits? Start with the audit. Or just reach out and describe what's not working — we'll figure it out from there.</p>
+    <form id="contact-form" action="https://formspree.io/f/xvzdezeg" method="POST">
+      <div class="form-row">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required autocomplete="name">
+      </div>
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+      <div class="form-row">
+        <label for="business">Business name (optional)</label>
+        <input type="text" id="business" name="business">
+      </div>
+      <div class="form-row">
+        <label for="service">What sounds most useful?</label>
+        <select id="service" name="service">
+          <option value="">— not sure yet —</option>
+          <option value="audit">The Operations Audit ($200)</option>
+          <option value="handbook">The Starter Handbook ($500)</option>
+          <option value="sop">The SOP Sprint ($175)</option>
+          <option value="systems">Systems Setup (from $250)</option>
+          <option value="other">Something else</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="message">What's going on?</label>
+        <textarea id="message" name="message" placeholder="Describe what's overwhelming you or what you're trying to fix."></textarea>
+      </div>
+      <div class="form-submit">
+        <button type="submit" id="submit-btn" class="cta-btn">Send it ↗</button>
+      </div>
+      <p class="form-success" id="form-success">Got it — I'll be in touch soon.</p>
+      <p class="form-error" id="form-error">Something went wrong. Try emailing directly at contact@bluestem.systems.</p>
+    </form>
+    <script>
+      const form = document.getElementById('contact-form');
+      const btn = document.getElementById('submit-btn');
+      const success = document.getElementById('form-success');
+      const error = document.getElementById('form-error');
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            form.reset();
+            form.style.display = 'none';
+            success.style.display = 'block';
+          } else {
+            throw new Error();
+          }
+        } catch {
+          error.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Send it ↗';
+        }
+      });
+    </script>
+  </section>
+  <footer>
+    <span class="footer-word">Bluestem</span>
+    <span class="footer-loc">Central Texas &nbsp;·&nbsp; bluestem.systems</span>
+  </footer>
+</div>
+</body>
+</html>
