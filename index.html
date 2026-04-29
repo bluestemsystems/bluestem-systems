@@ -17,7 +17,8 @@
       --paper-mid: #eeebe4;
       --rule: rgba(28,28,26,0.12);
       --rule-mid: rgba(28,28,26,0.22);
-      --accent: #3a6b3a;
+      --accent: #506226;
+      --russet: #bb7878;
       --serif: 'Libre Baskerville', Georgia, serif;
       --mono: 'DM Mono', 'Courier New', monospace;
     }
@@ -51,7 +52,7 @@
     .service:first-of-type { border-top: 0.5px solid var(--rule); }
     .service-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; opacity: 0.8; }
     .service-name { font-size: 17px; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--accent); padding: 2px 7px; color: var(--paper); font-weight: 400; white-space: nowrap; opacity: 0.85; }
+    .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--russet); padding: 2px 7px; color: var(--paper); font-weight: 400; white-space: nowrap; opacity: 0.9; }
     .service-desc { font-size: 14px; font-style: italic; color: var(--ink-mid); line-height: 1.65; margin-bottom: 0.5rem; }
     .service-includes { font-family: var(--mono); font-size: 10px; color: var(--ink-light); letter-spacing: 0.02em; }
     .service-price { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--ink); white-space: nowrap; padding-top: 1.6rem; }
@@ -72,6 +73,9 @@
 
     /* GRASS ACCENT */
     .grass-mark { display: inline-block; width: 4px; height: 22px; background: var(--accent); margin-right: 12px; vertical-align: middle; opacity: 0.75; }
+    .logo-img { height: 36px; width: auto; display: block; }
+    .wordmark-wrap { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .wordmark-wrap .wordmark { line-height: 1; }
 
     /* FOOTER */
     footer { margin-top: 4rem; padding: 1.5rem 0 2.5rem; border-top: 0.5px solid var(--rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
@@ -88,7 +92,10 @@
 <body>
 <div class="wrap">
   <nav>
-    <a href="#" class="wordmark">Bluestem</a>
+    <a href="#" class="wordmark-wrap">
+      <img src="bluestem-mark.png" alt="Bluestem" class="logo-img" onerror="this.style.display='none'">
+      <span class="wordmark">Bluestem</span>
+    </a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About</a></li>
@@ -96,7 +103,7 @@
     </ul>
   </nav>
   <section class="hero">
-    <p class="eyebrow">Operations &amp; documentation for small businesses</p>
+    <p class="eyebrow">Operations. Documented. Simplified.</p>
     <h1><span class="grass-mark"></span>Builds the systems and writes the documents small businesses need but never have time to create.</h1>
     <p class="subhead">Bluestem helps small business owners simplify how they operate, so the work that matters stops getting buried.</p>
     <a href="#contact" class="cta-btn">Get in touch ↗</a>
