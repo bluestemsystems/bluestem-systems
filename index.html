@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluestem — Operations & Documentation for Small Businesses</title>
-  <meta name="description" content="Bluestem builds the systems and writes the documents small businesses need but never have time to create.">
+  <title>Bluestem — Operations & Bookkeeping for Online Businesses</title>
+  <meta name="description" content="Bluestem helps business owners stop drowning in their own backend. Systems, bookkeeping, and operations so you can focus on the work only you can do.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
@@ -26,7 +26,7 @@
     body { font-family: var(--serif); background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; }
     .wrap { max-width: 680px; margin: 0 auto; padding: 0 1.5rem; }
 
-    /* NAV — always one line */
+    /* NAV */
     nav { padding: 1.25rem 0; border-bottom: 0.5px solid var(--rule); margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: nowrap; }
     .wordmark { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); text-decoration: none; white-space: nowrap; }
     .nav-links { list-style: none; display: flex; gap: 1.25rem; flex-shrink: 0; }
@@ -39,7 +39,7 @@
     h1 { font-family: var(--serif); font-size: clamp(24px, 5vw, 32px); font-weight: 700; line-height: 1.25; margin-bottom: 1.25rem; max-width: 560px; }
     .subhead { font-size: 16px; font-style: italic; color: var(--ink-mid); line-height: 1.75; max-width: 480px; margin-bottom: 2rem; }
 
-    /* BUTTON — filled, more presence */
+    /* BUTTON */
     .cta-btn { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper); background: var(--ink); border: none; padding: 13px 26px; text-decoration: none; transition: opacity 0.15s; cursor: pointer; }
     .cta-btn:hover { opacity: 0.82; }
     .cta-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -53,12 +53,20 @@
     .service-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; opacity: 0.8; }
     .service-name { font-size: 17px; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--russet); padding: 2px 7px; color: var(--paper); font-weight: 400; white-space: nowrap; opacity: 0.9; }
+    .badge-green { background: var(--accent); }
     .service-desc { font-size: 14px; font-style: italic; color: var(--ink-mid); line-height: 1.65; margin-bottom: 0.5rem; }
     .service-includes { font-family: var(--mono); font-size: 10px; color: var(--ink-light); letter-spacing: 0.02em; }
     .service-price { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--ink); white-space: nowrap; padding-top: 1.6rem; }
 
+    /* WHO */
+    .who-list { list-style: none; margin-top: 1rem; }
+    .who-list li { font-size: 14px; font-style: italic; color: var(--ink-mid); line-height: 1.65; padding: 0.5rem 0; border-bottom: 0.5px solid var(--rule); display: flex; align-items: baseline; gap: 0.75rem; }
+    .who-list li:last-child { border-bottom: none; }
+    .who-list li::before { content: '—'; font-family: var(--mono); font-size: 10px; color: var(--accent); flex-shrink: 0; }
+
     /* ABOUT */
     .about p { font-size: 15px; font-style: italic; color: var(--ink-mid); line-height: 1.85; max-width: 500px; }
+    .about p + p { margin-top: 1rem; }
 
     /* CONTACT */
     .contact-intro { font-size: 15px; font-style: italic; color: var(--ink-mid); margin-bottom: 2rem; line-height: 1.75; }
@@ -98,65 +106,103 @@
     </a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
+      <li><a href="#who">Who it's for</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
+
   <section class="hero">
-    <p class="eyebrow">Operations. Documented. Simplified.</p>
-    <h1><span class="grass-mark"></span>Builds the systems and writes the documents small businesses need but never have time to create.</h1>
-    <p class="subhead">Bluestem helps small business owners simplify how they operate, so the work that matters stops getting buried.</p>
+    <p class="eyebrow">Operations. Bookkeeping. Simplified.</p>
+    <h1><span class="grass-mark"></span>Your business shouldn't feel like it's running you.</h1>
+    <p class="subhead">Bluestem handles the systems, books, and operations behind your business — so you can stay in your zone and stop drowning in the backend.</p>
     <a href="#contact" class="cta-btn">Get in touch ↗</a>
   </section>
+
   <hr class="rule">
+
   <section id="services">
     <p class="section-label">Services</p>
+
     <div class="service">
       <div>
         <p class="service-tag">Start here</p>
         <p class="service-name">The Operations Audit <span class="badge">recommended</span></p>
-        <p class="service-desc">A focused look at how your business currently runs. We identify your three biggest friction points and deliver a prioritized written action plan so you know exactly what to fix and in what order.</p>
+        <p class="service-desc">A focused look at how your business actually runs. We find the three biggest friction points in your backend and deliver a prioritized written action plan so you know exactly what to fix and in what order.</p>
         <p class="service-includes">Written report + one hour debrief call</p>
       </div>
-      <div class="service-price">$200</div>
+      <div class="service-price">$400</div>
     </div>
+
+    <div class="service">
+      <div>
+        <p class="service-tag">Bookkeeping</p>
+        <p class="service-name">Monthly Bookkeeping <span class="badge badge-green">QuickBooks certified</span></p>
+        <p class="service-desc">Clean books every month without you having to think about it. Transactions categorized, accounts reconciled, and a simple report delivered so you always know where you stand financially.</p>
+        <p class="service-includes">Monthly reconciliation, categorization & reporting — QuickBooks Online</p>
+      </div>
+      <div class="service-price">from $250/mo</div>
+    </div>
+
     <div class="service">
       <div>
         <p class="service-tag">Documentation</p>
-        <p class="service-name">The Starter Handbook</p>
-        <p class="service-desc">Your business's first real employee handbook. Policies, expectations, onboarding basics, and the things that currently live only in your head — written down and ready to use.</p>
-        <p class="service-includes">Complete document, formatted and ready to hand to your team</p>
+        <p class="service-name">SOP & Process Writing</p>
+        <p class="service-desc">The processes that live in your head, written down so your team can follow them without you in the room. One messy workflow at a time, made clean, repeatable, and ready to hand off.</p>
+        <p class="service-includes">Polished SOP documents, formatted and ready to use</p>
       </div>
-      <div class="service-price">$500</div>
+      <div class="service-price">from $175</div>
     </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Process writing</p>
-        <p class="service-name">The SOP Sprint</p>
-        <p class="service-desc">One messy process, made clean. We map how it actually works and I write a repeatable step-by-step document your team can follow without you in the room.</p>
-        <p class="service-includes">One polished SOP document</p>
-      </div>
-      <div class="service-price">$175</div>
-    </div>
+
     <div class="service">
       <div>
         <p class="service-tag">Automation</p>
-        <p class="service-name">Systems Setup</p>
-        <p class="service-desc">You've got the tools, they're just not talking to each other. I'll connect and configure your existing platforms so your workflow actually flows.</p>
-        <p class="service-includes">Setup, testing, and a short walkthrough doc</p>
+        <p class="service-name">Systems Setup & Automation</p>
+        <p class="service-desc">Your tools aren't talking to each other and you're doing manually what should happen automatically. I'll connect and configure your platforms so your workflow actually flows — onboarding, invoicing, lead capture, and more.</p>
+        <p class="service-includes">Setup, testing, and a walkthrough doc so you know how it works</p>
       </div>
-      <div class="service-price">from $150</div>
+      <div class="service-price">from $300</div>
+    </div>
+
+    <div class="service">
+      <div>
+        <p class="service-tag">Ongoing support</p>
+        <p class="service-name">Fractional Operations Management <span class="badge">retainer</span></p>
+        <p class="service-desc">Your embedded operations partner, without the overhead of a full-time hire. I handle the systems, tools, and backend of your business on an ongoing basis so nothing falls through the cracks as you grow.</p>
+        <p class="service-includes">Monthly retainer · bookkeeping can be bundled in</p>
+      </div>
+      <div class="service-price">from $1,500/mo</div>
     </div>
   </section>
+
   <hr class="rule">
+
+  <section id="who">
+    <p class="section-label">Who it's for</p>
+    <p style="font-size:15px; font-style:italic; color:var(--ink-mid); line-height:1.85;">Bluestem works with small and online service businesses and solopreneurs who have grown past what they can manage alone. If any of these sound familiar, you're in the right place.</p>
+    <ul class="who-list">
+      <li>You're a coach, consultant, course creator, or small business owner running your business through a stack of tools that never quite work together</li>
+      <li>You've got clients, revenue, and momentum — but your backend is chaos and you know it</li>
+      <li>Your books are somewhere between "a little behind" and "I haven't looked since Q1"</li>
+      <li>You have processes, but they live in your head and nowhere else</li>
+      <li>You've hired a VA or a small team and realized you have no documentation to hand them</li>
+      <li>You want to grow, but the operations layer of your business can't keep up</li>
+    </ul>
+  </section>
+
+  <hr class="rule">
+
   <section id="about" class="about">
     <p class="section-label">About</p>
-    <p>Bluestem is a one-person operation based in Central Texas. I work with small business owners who are good at what they do and overwhelmed by everything else — helping them get out from under their own paperwork so they can get back to the work they actually built the thing for.</p>
+    <p>Bluestem is a small team operation based in Central Texas, working remotely with online businesses across the country. We specialize in the backend layer — the systems, tools, processes, and books that keep a business running but rarely get the attention they need.</p>
+    <p>Our background is in office operations and process building for technology companies, and we have multiple staff certified with QuickBooks ProAdvisor. We work best with business owners who are excellent at what they do and ready to stop being their own operations department.</p>
   </section>
+
   <hr class="rule">
+
   <section id="contact">
     <p class="section-label">Contact</p>
-    <p class="contact-intro">Not sure which service fits? Start with the audit. Or just reach out and describe what's not working — we'll figure it out from there.</p>
+    <p class="contact-intro">Not sure where to start? The audit is almost always the right first step — it tells us both exactly what needs attention. Or just reach out and describe what's not working.</p>
     <form id="contact-form" action="https://formspree.io/f/xvzdezeg" method="POST">
       <div class="form-row">
         <label for="name">Name</label>
@@ -174,10 +220,11 @@
         <label for="service">What sounds most useful?</label>
         <select id="service" name="service">
           <option value="">— not sure yet —</option>
-          <option value="audit">The Operations Audit ($200)</option>
-          <option value="handbook">The Starter Handbook ($500)</option>
-          <option value="sop">The SOP Sprint ($175)</option>
-          <option value="systems">Systems Setup (from $250)</option>
+          <option value="audit">The Operations Audit ($400)</option>
+          <option value="bookkeeping">Monthly Bookkeeping (from $250/mo)</option>
+          <option value="sop">SOP & Process Writing (from $175)</option>
+          <option value="systems">Systems Setup & Automation (from $300)</option>
+          <option value="retainer">Fractional Ops Management (from $1,500/mo)</option>
           <option value="other">Something else</option>
         </select>
       </div>
@@ -221,6 +268,7 @@
       });
     </script>
   </section>
+
   <footer>
     <span class="footer-word">Bluestem</span>
     <span class="footer-loc">Central Texas &nbsp;·&nbsp; bluestem.systems</span>
