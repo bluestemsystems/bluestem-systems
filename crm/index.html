@@ -1,232 +1,962 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluestem Systems — Operations & Documentation for Small Businesses</title>
-  <meta name="description" content="Bluestem Systems builds the systems and writes the documents small businesses need but never have time to create.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue-primary: #1B4F72;
-      --blue-mid: #2E86C1;
-      --blue-light: #D6E8F5;
-      --russet: #bb7878;
-      --russet-light: #F9EEEE;
-      --text-dark: #222222;
-      --text-mid: #555555;
-      --text-light: #888888;
-      --border: #DDDDDD;
-      --cream: #FAFAF7;
-      --white: #ffffff;
-      --serif: 'Libre Baskerville', Georgia, serif;
-      --mono: 'DM Mono', 'Courier New', monospace;
-    }
-    html { font-size: 16px; scroll-behavior: smooth; }
-    body { font-family: var(--serif); background: var(--cream); color: var(--text-dark); line-height: 1.7; min-height: 100vh; }
-    .wrap { max-width: 680px; margin: 0 auto; padding: 0 1.5rem; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bluestem Systems — CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #FAFAF7; font-family: 'Libre Baskerville', serif; color: #222222; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #FAFAF7; }
+  ::-webkit-scrollbar-thumb { background: #DDDDDD; border-radius: 3px; }
+  .nav-btn { background: none; border: none; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 16px; border-radius: 4px; transition: all 0.15s; color: #D6E8F5; }
+  .nav-btn:hover { background: #2E86C1; color: white; }
+  .nav-btn.active { background: white; color: #1B4F72; }
+  .task-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 6px; border: 1px solid #DDDDDD; background: white; transition: all 0.15s; }
+  .task-row:hover { border-color: #2E86C144; box-shadow: 0 2px 8px #2E86C111; }
+  .task-row.done { opacity: 0.5; }
+  .task-row.recurring-row { border-style: dashed; }
+  .checkbox { width: 18px; height: 18px; border-radius: 3px; border: 2px solid #DDDDDD; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; margin-top: 2px; cursor: pointer; }
+  .checkbox.checked { background: #2E86C1; border-color: #2E86C1; }
+  .btn-primary { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 9px 18px; border-radius: 4px; border: none; cursor: pointer; background: #1B4F72; color: white; transition: background 0.15s; }
+  .btn-primary:hover { background: #2E86C1; }
+  .btn-russet { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 9px 18px; border-radius: 4px; border: none; cursor: pointer; background: #bb7878; color: white; transition: opacity 0.15s; }
+  .btn-russet:hover { opacity: 0.85; }
+  .btn-ghost { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 14px; border-radius: 4px; border: 1px solid #DDDDDD; cursor: pointer; background: transparent; color: #555555; transition: all 0.15s; }
+  .btn-ghost:hover { border-color: #2E86C1; color: #2E86C1; }
+  .input { width: 100%; padding: 9px 12px; border: 1px solid #DDDDDD; border-radius: 4px; font-family: 'Libre Baskerville', serif; font-size: 14px; color: #222222; background: white; outline: none; transition: border 0.15s; }
+  .input:focus { border-color: #2E86C1; box-shadow: 0 0 0 3px #D6E8F5; }
+  select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-color: white; padding-right: 32px; }
+  textarea.input { resize: vertical; min-height: 72px; }
+  .label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #555555; margin-bottom: 5px; display: block; }
+  .card { background: white; border: 1px solid #DDDDDD; border-radius: 8px; padding: 20px; }
+  .stat-card { background: white; border: 1px solid #DDDDDD; border-radius: 8px; padding: 16px 20px; border-left: 4px solid; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .modal { background: white; border-radius: 10px; padding: 28px; width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
+  .icon-btn { background: none; border: none; cursor: pointer; padding: 4px 6px; border-radius: 3px; color: #888888; font-size: 14px; transition: all 0.12s; }
+  .icon-btn:hover { background: #FAFAF7; color: #555555; }
+  .icon-btn.danger:hover { background: #F9EEEE; color: #bb7878; }
+  .client-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 6px; border: 1px solid #DDDDDD; background: white; transition: all 0.15s; }
+  .client-row:hover { border-color: #2E86C144; box-shadow: 0 2px 8px #2E86C111; }
+  .filter-pill { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; border: 1px solid #DDDDDD; cursor: pointer; background: white; color: #555555; transition: all 0.12s; }
+  .filter-pill.active { border-color: #1B4F72; background: #D6E8F5; color: #1B4F72; }
+  .overdue-banner { background: #F9EEEE; border-left: 4px solid #bb7878; padding: 10px 16px; border-radius: 4px; font-size: 13px; color: #bb7878; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .recur-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; border: 1px solid #DDDDDD; background: white; }
+  .recur-row:hover { border-color: #2E86C144; }
+  .recur-section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #888888; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .recur-section-label::after { content: ''; flex: 1; height: 1px; background: #DDDDDD; }
+  details summary { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #888888; cursor: pointer; padding: 8px 0; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: '▶ '; font-size: 9px; }
+  details[open] summary::before { content: '▼ '; }
 
-    /* NAV — always one line */
-    nav { padding: 1.25rem 0; border-bottom: 0.5px solid var(--border); margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: nowrap; }
-    .wordmark { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-primary); text-decoration: none; white-space: nowrap; }
-    .nav-links { list-style: none; display: flex; gap: 1.25rem; flex-shrink: 0; }
-    .nav-links a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
-    .nav-links a:hover { color: var(--blue-mid); }
+  /* Login screen */
+  .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #1B4F72; }
+  .login-card { background: white; border-radius: 12px; padding: 48px 40px; width: 100%; max-width: 380px; box-shadow: 0 24px 80px rgba(0,0,0,0.25); text-align: center; }
+  .login-wordmark { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 22px; color: #1B4F72; margin-bottom: 4px; }
+  .login-sub { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #888888; margin-bottom: 36px; }
+  .login-input { width: 100%; padding: 11px 14px; border: 1px solid #DDDDDD; border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 14px; color: #222222; outline: none; transition: border 0.15s; letter-spacing: 0.08em; text-align: center; }
+  .login-input:focus { border-color: #2E86C1; box-shadow: 0 0 0 3px #D6E8F5; }
+  .login-btn { width: 100%; margin-top: 12px; padding: 11px; background: #1B4F72; color: white; border: none; border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
+  .login-btn:hover { background: #2E86C1; }
+  .login-error { font-family: 'DM Mono', monospace; font-size: 11px; color: #bb7878; margin-top: 10px; letter-spacing: 0.04em; }
 
-    /* HERO */
-    .hero { margin-bottom: 3.5rem; padding: 2rem 0 0; }
-    .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); margin-bottom: 1.1rem; }
-    h1 { font-family: var(--serif); font-size: clamp(24px, 5vw, 32px); font-weight: 700; line-height: 1.25; margin-bottom: 1.25rem; max-width: 560px; color: var(--blue-primary); }
-    .subhead { font-size: 16px; font-style: italic; color: var(--text-mid); line-height: 1.75; max-width: 480px; margin-bottom: 2rem; }
+  /* Drive status */
+  .drive-status { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; }
+  .drive-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .drive-dot.connected { background: #6aaa8c; }
+  .drive-dot.disconnected { background: #bb7878; }
+  .drive-dot.syncing { background: #f0c040; }
 
-    /* BUTTON */
-    .cta-btn { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); background: var(--russet); border: none; padding: 13px 26px; text-decoration: none; transition: opacity 0.15s; cursor: pointer; }
-    .cta-btn:hover { opacity: 0.82; }
-    .cta-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    .rule { border: none; border-top: 0.5px solid var(--border); margin: 3rem 0; }
-    .section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 1.75rem; }
-
-    /* SERVICES */
-    .service { display: grid; grid-template-columns: 1fr auto; gap: 1.25rem; align-items: start; padding: 1.5rem 0; border-bottom: 0.5px solid var(--border); }
-    .service:first-of-type { border-top: 0.5px solid var(--border); }
-    .service-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--blue-mid); margin-bottom: 0.35rem; opacity: 0.8; }
-    .service-name { font-size: 17px; font-weight: 700; margin-bottom: 0.5rem; color: var(--blue-primary); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--russet); padding: 2px 7px; color: var(--white); font-weight: 400; white-space: nowrap; opacity: 0.9; }
-    .service-desc { font-size: 14px; font-style: italic; color: var(--text-mid); line-height: 1.65; margin-bottom: 0.5rem; }
-    .service-includes { font-family: var(--mono); font-size: 10px; color: var(--text-light); letter-spacing: 0.02em; }
-    .service-price { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--blue-primary); white-space: nowrap; padding-top: 1.6rem; }
-
-    /* ABOUT */
-    .about p { font-size: 15px; font-style: italic; color: var(--text-mid); line-height: 1.85; max-width: 500px; }
-
-    /* CONTACT */
-    .contact-intro { font-size: 15px; font-style: italic; color: var(--text-mid); margin-bottom: 2rem; line-height: 1.75; }
-    .form-row { margin-bottom: 1.1rem; }
-    label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 0.35rem; }
-    input, textarea, select { width: 100%; font-family: var(--serif); font-size: 15px; color: var(--text-dark); background: var(--blue-light); border: 0.5px solid var(--border); padding: 10px 12px; outline: none; transition: border-color 0.15s, background 0.15s; appearance: none; border-radius: 0; }
-    input:focus, textarea:focus, select:focus { border-color: var(--blue-primary); background: var(--cream); }
-    textarea { resize: vertical; min-height: 120px; }
-    .form-submit { margin-top: 1.5rem; }
-    .form-success { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--blue-mid); margin-top: 1rem; display: none; }
-    .form-error { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--russet); margin-top: 1rem; display: none; }
-
-    /* GRASS ACCENT */
-    .grass-mark { display: inline-block; width: 4px; height: 22px; background: var(--blue-mid); margin-right: 12px; vertical-align: middle; opacity: 0.75; }
-    .logo-img { height: 36px; width: auto; display: block; }
-    .wordmark-wrap { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .wordmark-wrap .wordmark { line-height: 1; }
-
-    /* FOOTER */
-    footer { margin-top: 4rem; padding: 1.5rem 0 2.5rem; border-top: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
-    .footer-word { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); }
-    .footer-loc { font-family: var(--mono); font-size: 11px; color: var(--text-light); letter-spacing: 0.03em; }
-
-    @media (max-width: 480px) {
-      .service { grid-template-columns: 1fr; }
-      .service-price { padding-top: 0; font-size: 14px; }
-      footer { flex-direction: column; align-items: flex-start; }
-    }
-  </style>
+  .sync-btn { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; background: transparent; color: #D6E8F5; transition: all 0.15s; }
+  .sync-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+  .sync-btn.connected { color: #b8e6cd; border-color: rgba(184,230,205,0.4); }
+</style>
 </head>
 <body>
-<div class="wrap">
-  <nav>
-    <a href="#" class="wordmark-wrap">
-      <img src="bluestem-mark.png" alt="Bluestem Systems" class="logo-img" onerror="this.style.display='none'">
-      <span class="wordmark">Bluestem Systems</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-  <section class="hero">
-    <p class="eyebrow">Operations. Documented. Simplified.</p>
-    <h1><span class="grass-mark"></span>Builds the systems and writes the documents small businesses need but never have time to create.</h1>
-    <p class="subhead">Bluestem Systems helps small business owners simplify how they operate, so the work that matters stops getting buried.</p>
-    <a href="#contact" class="cta-btn">Get in touch ↗</a>
-  </section>
-  <hr class="rule">
-  <section id="services">
-    <p class="section-label">Services</p>
-    <div class="service">
-      <div>
-        <p class="service-tag">Start here</p>
-        <p class="service-name">The Operations Audit <span class="badge">recommended</span></p>
-        <p class="service-desc">A focused look at how your business currently runs. We identify your three biggest friction points and deliver a prioritized written action plan so you know exactly what to fix and in what order.</p>
-        <p class="service-includes">Written report + one hour debrief call</p>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+// Set your passphrase here. SHA-256 hash of the passphrase is checked,
+// so the raw password is never stored. To change it, replace the PASSPHRASE_HASH
+// with the SHA-256 hash of your new password.
+// Current passphrase: Raymond2025!
+// To generate a new hash: https://emn178.github.io/online-tools/sha256.html
+const PASSPHRASE_HASH = "b3c890c0f8bff7af50e77f2a54acd5c2f7fb6a04b6b8a1b7e5d0c3a9f2e1d8b7";
+
+// Google Drive config — fill these in after creating your Google Cloud project
+// Instructions at bottom of this file
+const GOOGLE_CLIENT_ID   = "YOUR_GOOGLE_CLIENT_ID_HERE";
+const GOOGLE_API_KEY     = "YOUR_GOOGLE_API_KEY_HERE";
+const DRIVE_FILE_NAME    = "bluestem-crm-data.json";
+const DRIVE_SCOPE        = "https://www.googleapis.com/auth/drive.appdata";
+
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+const COLORS = {
+  primaryBlue:"#1B4F72", midBlue:"#2E86C1", lightBlue:"#D6E8F5",
+  russet:"#bb7878", russetLight:"#F9EEEE", darkText:"#222222",
+  midGray:"#555555", lightGray:"#888888", borderGray:"#DDDDDD", cream:"#FAFAF7",
+};
+
+const TASK_TYPES = [
+  { value:"follow-up",  label:"Client Follow-Up",      color:"#2E86C1" },
+  { value:"outreach",   label:"Outreach / Prospecting", color:"#bb7878" },
+  { value:"internal",   label:"Internal Ops",           color:"#6aaa8c" },
+  { value:"milestone",  label:"Project Milestone",      color:"#8e7bb5" },
+];
+
+const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const JS_DAY_TO_IDX = [6,0,1,2,3,4,5];
+
+const DEFAULT_RECURRING = [
+  { id:"r1", title:"Write & post LinkedIn #1 (batch Wed + Fri posts too)", type:"outreach", days:[0], notes:"30-40 min. Write all 3 posts in one sitting on Monday.", active:true },
+  { id:"r2", title:"Send 3-5 warm outreach messages", type:"outreach", days:[1], notes:"30 min. Keep a running list of 10 warm contacts so you're just writing, not thinking.", active:true },
+  { id:"r3", title:"Post LinkedIn #2 (pre-written Monday)", type:"outreach", days:[2], notes:"10 min. Copy/paste only.", active:true },
+  { id:"r4", title:"Apply to 2 Upwork jobs OR answer 1-2 Reddit questions", type:"outreach", days:[3], notes:"30-45 min. Upwork: personalize each proposal. Reddit: lead with direct answer, never drop your link in comments.", active:true },
+  { id:"r5", title:"Post LinkedIn #3 + Google Business post", type:"outreach", days:[4], notes:"25 min. Reuse Friday LinkedIn post for Google Business, trim to 150 words, remove hashtags, add bluestem.systems CTA.", active:true },
+];
+
+const EMPTY_DATA = { tasks:[], clients:[], recurring:DEFAULT_RECURRING, recurDone:{} };
+
+const todayStr = () => new Date().toISOString().slice(0,10);
+const fmt = (d) => new Date(d+"T00:00:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+const uid = () => Math.random().toString(36).slice(2,10);
+
+// ─── SHA-256 ──────────────────────────────────────────────────────────────────
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ─── GOOGLE DRIVE HELPERS ────────────────────────────────────────────────────
+let gapiReady = false;
+let gisReady = false;
+let tokenClient = null;
+
+function loadGapiScript() {
+  return new Promise(resolve => {
+    if (window.gapi) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://apis.google.com/js/api.js';
+    s.onload = resolve;
+    document.head.appendChild(s);
+  });
+}
+
+function loadGisScript() {
+  return new Promise(resolve => {
+    if (window.google?.accounts) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.onload = resolve;
+    document.head.appendChild(s);
+  });
+}
+
+async function initGapi() {
+  await loadGapiScript();
+  await new Promise(resolve => window.gapi.load('client', resolve));
+  await window.gapi.client.init({ apiKey: GOOGLE_API_KEY, discoveryDocs:[] });
+  await window.gapi.client.load('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest');
+  gapiReady = true;
+}
+
+async function initGis() {
+  await loadGisScript();
+  tokenClient = window.google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: DRIVE_SCOPE,
+    callback: () => {},
+  });
+  gisReady = true;
+}
+
+function requestToken() {
+  return new Promise((resolve, reject) => {
+    tokenClient.callback = (resp) => {
+      if (resp.error) reject(resp);
+      else resolve(resp);
+    };
+    tokenClient.requestAccessToken({ prompt: '' });
+  });
+}
+
+async function findDriveFile() {
+  const res = await window.gapi.client.drive.files.list({
+    spaces: 'appDataFolder',
+    fields: 'files(id,name)',
+    q: `name='${DRIVE_FILE_NAME}'`,
+  });
+  return res.result.files?.[0] || null;
+}
+
+async function readDriveFile(fileId) {
+  const res = await window.gapi.client.drive.files.get({
+    fileId,
+    alt: 'media',
+  });
+  return typeof res.result === 'string' ? JSON.parse(res.result) : res.result;
+}
+
+async function writeDriveFile(fileId, data) {
+  const body = JSON.stringify(data);
+  if (fileId) {
+    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${window.gapi.client.getToken().access_token}`, 'Content-Type': 'application/json' },
+      body,
+    });
+  } else {
+    const meta = { name: DRIVE_FILE_NAME, parents: ['appDataFolder'] };
+    const form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(meta)], { type:'application/json' }));
+    form.append('media', new Blob([body], { type:'application/json' }));
+    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${window.gapi.client.getToken().access_token}` },
+      body: form,
+    });
+    const j = await res.json();
+    return j.id;
+  }
+}
+
+// ─── STORAGE HOOK (localStorage fallback) ────────────────────────────────────
+function useLocalStorage(key, init) {
+  const [val, setVal] = useState(() => {
+    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : init; } catch { return init; }
+  });
+  useEffect(() => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }, [key, val]);
+  return [val, setVal];
+}
+
+// ─── COMPONENTS ──────────────────────────────────────────────────────────────
+const Badge = ({ type }) => {
+  const t = TASK_TYPES.find(x => x.value===type);
+  return <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,padding:"2px 8px",borderRadius:3,background:t?.color+"22",color:t?.color,border:`1px solid ${t?.color}44`,whiteSpace:"nowrap",letterSpacing:"0.04em",textTransform:"uppercase"}}>{t?.label}</span>;
+};
+
+const Checkmark = () => (
+  <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+    <path d="M1 4l3 3 5-6" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const RecurBadge = () => (
+  <span style={{fontFamily:"'DM Mono',monospace",fontSize:9,padding:"1px 6px",borderRadius:3,background:"#1B4F7215",color:"#1B4F72",border:"1px solid #1B4F7225",letterSpacing:"0.05em",textTransform:"uppercase"}}>recurring</span>
+);
+
+function TaskRow({ t, onToggle, onEdit, onDelete, showDate, clientName, isRecurring }) {
+  return (
+    <div className={`task-row${t.done?" done":""}${isRecurring?" recurring-row":""}`}>
+      <div className={`checkbox${t.done?" checked":""}`} onClick={() => onToggle(t.id)}>
+        {t.done && <Checkmark />}
       </div>
-      <div class="service-price">$200</div>
+      <div style={{flex:1,minWidth:0,cursor:"pointer"}} onClick={() => onToggle(t.id)}>
+        <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+          <span style={{fontSize:14,fontWeight:t.done?400:700,textDecoration:t.done?"line-through":"none"}}>{t.title}</span>
+          <Badge type={t.type} />
+          {isRecurring && <RecurBadge />}
+          {clientName && <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:COLORS.midGray}}>@ {clientName}</span>}
+          {showDate && <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:COLORS.lightGray}}>{t.dueDate}</span>}
+        </div>
+        {t.notes && <div style={{fontSize:12,color:COLORS.midGray,marginTop:3,fontStyle:"italic"}}>{t.notes}</div>}
+      </div>
+      <div style={{display:"flex",gap:2,flexShrink:0}}>
+        {!isRecurring && <button className="icon-btn" onClick={() => onEdit(t)}>✎</button>}
+        <button className="icon-btn danger" onClick={() => onDelete(t)}>✕</button>
+      </div>
     </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Documentation</p>
-        <p class="service-name">The Starter Handbook</p>
-        <p class="service-desc">Your business's first real employee handbook. Policies, expectations, onboarding basics, and the things that currently live only in your head — written down and ready to use.</p>
-        <p class="service-includes">Complete document, formatted and ready to hand to your team</p>
+  );
+}
+
+// ─── LOGIN SCREEN ─────────────────────────────────────────────────────────────
+function LoginScreen({ onUnlock }) {
+  const [pass, setPass] = useState('');
+  const [error, setError] = useState('');
+  const [checking, setChecking] = useState(false);
+
+  async function attempt() {
+    if (!pass.trim()) return;
+    setChecking(true);
+    const hash = await sha256(pass.trim());
+    if (hash === PASSPHRASE_HASH) {
+      sessionStorage.setItem('bluestem_unlocked', '1');
+      onUnlock();
+    } else {
+      setError('Incorrect passphrase.');
+      setPass('');
+    }
+    setChecking(false);
+  }
+
+  return (
+    <div className="login-screen">
+      <div className="login-card">
+        <div className="login-wordmark">Bluestem Systems</div>
+        <div className="login-sub">Operations. Documented. Simplified.</div>
+        <input
+          className="login-input"
+          type="password"
+          placeholder="Enter passphrase"
+          value={pass}
+          onChange={e => { setPass(e.target.value); setError(''); }}
+          onKeyDown={e => e.key==='Enter' && attempt()}
+          autoFocus
+        />
+        <button className="login-btn" onClick={attempt} disabled={checking}>
+          {checking ? 'Checking...' : 'Unlock'}
+        </button>
+        {error && <div className="login-error">{error}</div>}
       </div>
-      <div class="service-price">$500</div>
     </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Process writing</p>
-        <p class="service-name">The SOP Sprint</p>
-        <p class="service-desc">One messy process, made clean. We map how it actually works and I write a repeatable step-by-step document your team can follow without you in the room.</p>
-        <p class="service-includes">One polished SOP document</p>
-      </div>
-      <div class="service-price">$175</div>
+  );
+}
+
+// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+function App() {
+  const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('bluestem_unlocked')==='1');
+
+  // All data in one object for easy Drive sync
+  const [data, setData] = useLocalStorage('bluestem_crm_data', EMPTY_DATA);
+
+  // Drive state
+  const [driveStatus, setDriveStatus] = useState('disconnected'); // disconnected | connecting | connected | syncing | error
+  const [driveFileId, setDriveFileId] = useState(null);
+  const driveReady = useRef(false);
+
+  // Destructure for convenience
+  const tasks    = data.tasks    || [];
+  const clients  = data.clients  || [];
+  const recurring = data.recurring || DEFAULT_RECURRING;
+  const recurDone = data.recurDone || {};
+
+  function updateData(patch) {
+    setData(prev => {
+      const next = { ...prev, ...patch };
+      // Auto-push to Drive if connected
+      if (driveReady.current && driveFileId) {
+        pushToDrive(next, driveFileId);
+      }
+      return next;
+    });
+  }
+
+  async function pushToDrive(payload, fid) {
+    try {
+      setDriveStatus('syncing');
+      await writeDriveFile(fid, payload);
+      setDriveStatus('connected');
+    } catch(e) {
+      console.error('Drive write failed', e);
+      setDriveStatus('error');
+    }
+  }
+
+  async function connectDrive() {
+    try {
+      setDriveStatus('connecting');
+      await Promise.all([initGapi(), initGis()]);
+      await requestToken();
+      driveReady.current = true;
+
+      let file = await findDriveFile();
+      if (file) {
+        // Load from Drive
+        const remote = await readDriveFile(file.id);
+        setDriveFileId(file.id);
+        setData(remote);
+      } else {
+        // First time: push local data up
+        const newId = await writeDriveFile(null, data);
+        setDriveFileId(newId || 'new');
+      }
+      setDriveStatus('connected');
+    } catch(e) {
+      console.error('Drive connect failed', e);
+      setDriveStatus('error');
+    }
+  }
+
+  async function syncNow() {
+    if (!driveReady.current) return;
+    try {
+      setDriveStatus('syncing');
+      let fid = driveFileId;
+      if (!fid) {
+        const file = await findDriveFile();
+        if (file) { fid = file.id; setDriveFileId(fid); }
+      }
+      if (fid) {
+        const remote = await readDriveFile(fid);
+        setData(remote);
+      }
+      setDriveStatus('connected');
+    } catch(e) {
+      setDriveStatus('error');
+    }
+  }
+
+  // Views & UI state
+  const [view, setView] = useState('dashboard');
+  const [selectedDate, setSelectedDate] = useState(todayStr());
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(false);
+  const [showRecurModal, setShowRecurModal] = useState(false);
+  const [editTask, setEditTask] = useState(null);
+  const [editClient, setEditClient] = useState(null);
+  const [editRecur, setEditRecur] = useState(null);
+  const [taskForm, setTaskForm] = useState({title:'',type:'follow-up',clientId:'',dueDate:todayStr(),notes:''});
+  const [clientForm, setClientForm] = useState({name:'',company:'',email:'',phone:'',status:'active',notes:''});
+  const [recurForm, setRecurForm] = useState({title:'',type:'outreach',days:[],notes:'',active:true});
+  const [filter, setFilter] = useState('all');
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
+  if (!unlocked) return <LoginScreen onUnlock={() => setUnlocked(true)} />;
+
+  const clientName = id => clients.find(c=>c.id===id)?.name||'';
+
+  const getRecurringForDate = (dateStr) => {
+    const d = new Date(dateStr+'T00:00:00');
+    const dayIdx = JS_DAY_TO_IDX[d.getDay()];
+    return recurring.filter(r => r.active && r.days.includes(dayIdx));
+  };
+
+  const recurForDate = getRecurringForDate(selectedDate);
+  const recurDoneForDate = recurDone[selectedDate] || {};
+
+  const toggleRecurDone = (recurId) => {
+    const newRecurDone = {
+      ...recurDone,
+      [selectedDate]: { ...(recurDone[selectedDate]||{}), [recurId]: !(recurDone[selectedDate]||{})[recurId] }
+    };
+    updateData({ recurDone: newRecurDone });
+  };
+
+  const todayTasks = tasks.filter(t => t.dueDate===selectedDate);
+  const filteredTasks = filter==='all' ? todayTasks : todayTasks.filter(t=>t.type===filter);
+  const filteredRecur = filter==='all' ? recurForDate : recurForDate.filter(r=>r.type===filter);
+  const completedToday = todayTasks.filter(t=>t.done).length + recurForDate.filter(r=>recurDoneForDate[r.id]).length;
+  const totalToday = todayTasks.length + recurForDate.length;
+  const overdue = tasks.filter(t=>!t.done && t.dueDate<todayStr());
+
+  const typeBreakdown = TASK_TYPES.map(t => {
+    const rCount = todayTasks.filter(x=>x.type===t.value).length;
+    const rrCount = recurForDate.filter(x=>x.type===t.value).length;
+    const rDone = todayTasks.filter(x=>x.type===t.value&&x.done).length;
+    const rrDone = recurForDate.filter(x=>x.type===t.value&&recurDoneForDate[x.id]).length;
+    return { ...t, count:rCount+rrCount, done:rDone+rrDone };
+  });
+
+  // Task CRUD
+  function openAddTask() { setEditTask(null); setTaskForm({title:'',type:'follow-up',clientId:'',dueDate:selectedDate,notes:''}); setShowTaskModal(true); }
+  function openEditTask(t) { setEditTask(t); setTaskForm({title:t.title,type:t.type,clientId:t.clientId||'',dueDate:t.dueDate,notes:t.notes||''}); setShowTaskModal(true); }
+  function saveTask() {
+    if (!taskForm.title.trim()) return;
+    const newTasks = editTask
+      ? tasks.map(t=>t.id===editTask.id?{...t,...taskForm}:t)
+      : [...tasks, {id:uid(),done:false,createdAt:new Date().toISOString(),...taskForm}];
+    updateData({ tasks: newTasks });
+    setShowTaskModal(false);
+  }
+  function toggleTask(id) { updateData({ tasks: tasks.map(t=>t.id===id?{...t,done:!t.done}:t) }); }
+  function deleteTask(id) { updateData({ tasks: tasks.filter(t=>t.id!==id) }); setConfirmDelete(null); }
+
+  // Client CRUD
+  function openAddClient() { setEditClient(null); setClientForm({name:'',company:'',email:'',phone:'',status:'active',notes:''}); setShowClientModal(true); }
+  function openEditClient(c) { setEditClient(c); setClientForm({name:c.name,company:c.company||'',email:c.email||'',phone:c.phone||'',status:c.status,notes:c.notes||''}); setShowClientModal(true); }
+  function saveClient() {
+    if (!clientForm.name.trim()) return;
+    const newClients = editClient
+      ? clients.map(c=>c.id===editClient.id?{...c,...clientForm}:c)
+      : [...clients, {id:uid(),createdAt:new Date().toISOString(),...clientForm}];
+    updateData({ clients: newClients });
+    setShowClientModal(false);
+  }
+  function deleteClient(id) { updateData({ clients: clients.filter(c=>c.id!==id) }); setConfirmDelete(null); }
+
+  // Recurring CRUD
+  function openAddRecur() { setEditRecur(null); setRecurForm({title:'',type:'outreach',days:[],notes:'',active:true}); setShowRecurModal(true); }
+  function openEditRecur(r) { setEditRecur(r); setRecurForm({title:r.title,type:r.type,days:[...r.days],notes:r.notes||'',active:r.active}); setShowRecurModal(true); }
+  function saveRecur() {
+    if (!recurForm.title.trim() || recurForm.days.length===0) return;
+    const newRec = editRecur
+      ? recurring.map(r=>r.id===editRecur.id?{...r,...recurForm}:r)
+      : [...recurring, {id:uid(),...recurForm}];
+    updateData({ recurring: newRec });
+    setShowRecurModal(false);
+  }
+  function deleteRecur(id) { updateData({ recurring: recurring.filter(r=>r.id!==id) }); setConfirmDelete(null); }
+  function toggleRecurActive(id) { updateData({ recurring: recurring.map(r=>r.id===id?{...r,active:!r.active}:r) }); }
+  const toggleRecurDay = (idx) => setRecurForm(f=>({...f,days:f.days.includes(idx)?f.days.filter(d=>d!==idx):[...f.days,idx].sort()}));
+
+  const driveStatusLabel = {
+    disconnected: 'Connect Google Drive',
+    connecting:   'Connecting...',
+    connected:    'Drive connected',
+    syncing:      'Syncing...',
+    error:        'Drive error — retry',
+  }[driveStatus];
+
+  const driveStatusColor = {
+    disconnected: '#888888',
+    connecting:   '#f0c040',
+    connected:    '#6aaa8c',
+    syncing:      '#f0c040',
+    error:        '#bb7878',
+  }[driveStatus];
+
+  const isDriveConfigured = GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID_HERE';
+
+  return (
+    <div style={{minHeight:'100vh',background:COLORS.cream}}>
+      {/* Header */}
+      <header style={{background:COLORS.primaryBlue,borderBottom:`3px solid ${COLORS.midBlue}`,padding:'0 32px'}}>
+        <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',height:58}}>
+          <div style={{display:'flex',alignItems:'baseline',gap:10}}>
+            <span style={{fontFamily:"'Libre Baskerville',serif",fontWeight:700,fontSize:18,color:'white'}}>Bluestem Systems</span>
+            <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:COLORS.lightBlue,letterSpacing:'0.1em',textTransform:'uppercase'}}>CRM</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:16}}>
+            <nav style={{display:'flex',gap:4}}>
+              {[['dashboard','Dashboard'],['tasks','Tasks'],['clients','Clients'],['recurring','Recurring']].map(([v,l])=>(
+                <button key={v} className={`nav-btn${view===v?' active':''}`} onClick={()=>setView(v)}>{l}</button>
+              ))}
+            </nav>
+            {/* Drive status */}
+            <div style={{borderLeft:'1px solid rgba(255,255,255,0.2)',paddingLeft:16,display:'flex',alignItems:'center',gap:8}}>
+              {isDriveConfigured ? (
+                <>
+                  <div className="drive-status" style={{color:driveStatusColor}}>
+                    <div className={`drive-dot ${driveStatus==='connected'?'connected':driveStatus==='syncing'?'syncing':'disconnected'}`}></div>
+                    <span>{driveStatusLabel}</span>
+                  </div>
+                  {driveStatus==='disconnected'||driveStatus==='error' ? (
+                    <button className="sync-btn" onClick={connectDrive}>Connect</button>
+                  ) : driveStatus==='connected' ? (
+                    <button className="sync-btn connected" onClick={syncNow}>↻ Sync</button>
+                  ) : null}
+                </>
+              ) : (
+                <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:'rgba(214,232,245,0.5)',letterSpacing:'0.04em'}}>Drive not configured</span>
+              )}
+              <button className="sync-btn" onClick={()=>{ sessionStorage.removeItem('bluestem_unlocked'); setUnlocked(false); }} style={{marginLeft:4,color:'rgba(214,232,245,0.6)',borderColor:'rgba(255,255,255,0.15)'}}>Lock</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main style={{maxWidth:1100,margin:'0 auto',padding:'32px'}}>
+
+        {/* DASHBOARD */}
+        {view==='dashboard' && (
+          <div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+              <div>
+                <h1 style={{fontSize:22,fontWeight:700,color:COLORS.primaryBlue,marginBottom:2}}>{fmt(selectedDate)}</h1>
+                <p style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.lightGray,letterSpacing:'0.06em'}}>
+                  {completedToday} of {totalToday} tasks complete
+                </p>
+              </div>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <input type="date" className="input" value={selectedDate} onChange={e=>setSelectedDate(e.target.value)} style={{width:'auto',fontSize:13}} />
+                <button className="btn-primary" onClick={openAddTask}>+ Add Task</button>
+              </div>
+            </div>
+
+            {overdue.length>0 && (
+              <div className="overdue-banner" style={{marginBottom:20}} onClick={()=>setView('tasks')}>
+                <span>⚠</span>
+                <span><strong>{overdue.length} overdue task{overdue.length>1?'s':''}</strong> from previous days. Click to review.</span>
+              </div>
+            )}
+
+            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:24}}>
+              {typeBreakdown.map(t=>(
+                <div key={t.value} className="stat-card" style={{borderLeftColor:t.color}}>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontSize:10,letterSpacing:'0.08em',textTransform:'uppercase',color:COLORS.midGray,marginBottom:6}}>{t.label}</div>
+                  <div style={{fontSize:24,fontWeight:700,color:t.color}}>{t.done}<span style={{fontSize:14,fontWeight:400,color:COLORS.lightGray}}>/{t.count}</span></div>
+                </div>
+              ))}
+            </div>
+
+            <div className="card">
+              <div style={{display:'flex',gap:6,marginBottom:16,flexWrap:'wrap'}}>
+                <button className={`filter-pill${filter==='all'?' active':''}`} onClick={()=>setFilter('all')}>All</button>
+                {TASK_TYPES.map(t=>(
+                  <button key={t.value} className={`filter-pill${filter===t.value?' active':''}`} onClick={()=>setFilter(t.value)}>{t.label}</button>
+                ))}
+              </div>
+
+              {filteredRecur.length>0 && (
+                <div style={{marginBottom:16}}>
+                  <div className="recur-section-label">Recurring</div>
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    {filteredRecur.map(r=>(
+                      <div key={r.id} className={`task-row recurring-row${recurDoneForDate[r.id]?' done':''}`}>
+                        <div className={`checkbox${recurDoneForDate[r.id]?' checked':''}`} onClick={()=>toggleRecurDone(r.id)}>
+                          {recurDoneForDate[r.id] && <Checkmark />}
+                        </div>
+                        <div style={{flex:1,minWidth:0,cursor:'pointer'}} onClick={()=>toggleRecurDone(r.id)}>
+                          <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                            <span style={{fontSize:14,fontWeight:recurDoneForDate[r.id]?400:700,textDecoration:recurDoneForDate[r.id]?'line-through':'none'}}>{r.title}</span>
+                            <Badge type={r.type} />
+                            <RecurBadge />
+                          </div>
+                          {r.notes && <div style={{fontSize:12,color:COLORS.midGray,marginTop:3,fontStyle:'italic'}}>{r.notes}</div>}
+                        </div>
+                        <button className="icon-btn" onClick={()=>openEditRecur(r)}>✎</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {filteredTasks.length>0 && (
+                <div>
+                  {filteredRecur.length>0 && <div className="recur-section-label">One-off</div>}
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    {filteredTasks.map(t=>(
+                      <TaskRow key={t.id} t={t} onToggle={toggleTask} onEdit={openEditTask}
+                        onDelete={t=>setConfirmDelete({type:'task',id:t.id,label:t.title})}
+                        clientName={clientName(t.clientId)} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {filteredTasks.length===0 && filteredRecur.length===0 && (
+                <div style={{textAlign:'center',padding:'32px 0',color:COLORS.lightGray,fontStyle:'italic',fontSize:14}}>
+                  No tasks for this day. Add one above.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TASKS */}
+        {view==='tasks' && (
+          <div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+              <div>
+                <h1 style={{fontSize:22,fontWeight:700,color:COLORS.primaryBlue}}>All Tasks</h1>
+                <p style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.lightGray,letterSpacing:'0.06em',marginTop:2}}>
+                  {tasks.filter(t=>!t.done).length} open, {tasks.filter(t=>t.done).length} complete
+                </p>
+              </div>
+              <button className="btn-primary" onClick={openAddTask}>+ Add Task</button>
+            </div>
+
+            {overdue.length>0 && (
+              <div style={{marginBottom:20}}>
+                <div style={{fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:'0.08em',textTransform:'uppercase',color:COLORS.russet,marginBottom:8}}>Overdue</div>
+                <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                  {overdue.map(t=>(
+                    <div key={t.id} className="task-row" style={{borderColor:COLORS.russet+'44',background:COLORS.russetLight}}>
+                      <div className="checkbox" onClick={()=>toggleTask(t.id)} />
+                      <div style={{flex:1,cursor:'pointer'}} onClick={()=>toggleTask(t.id)}>
+                        <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                          <span style={{fontSize:14,fontWeight:700}}>{t.title}</span>
+                          <Badge type={t.type} />
+                          <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:COLORS.russet}}>due {t.dueDate}</span>
+                          {t.clientId && <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:COLORS.midGray}}>@ {clientName(t.clientId)}</span>}
+                        </div>
+                        {t.notes && <div style={{fontSize:12,color:COLORS.midGray,marginTop:3,fontStyle:'italic'}}>{t.notes}</div>}
+                      </div>
+                      <div style={{display:'flex',gap:2}}>
+                        <button className="icon-btn" onClick={()=>openEditTask(t)}>✎</button>
+                        <button className="icon-btn danger" onClick={()=>setConfirmDelete({type:'task',id:t.id,label:t.title})}>✕</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(()=>{
+              const upcoming = tasks.filter(t=>t.dueDate>=todayStr()).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+              const byDate = upcoming.reduce((acc,t)=>{ (acc[t.dueDate]=acc[t.dueDate]||[]).push(t); return acc; },{});
+              return Object.entries(byDate).map(([date,dayTasks])=>(
+                <div key={date} style={{marginBottom:20}}>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:'0.08em',textTransform:'uppercase',color:date===todayStr()?COLORS.primaryBlue:COLORS.midGray,marginBottom:8,display:'flex',alignItems:'center',gap:8}}>
+                    {fmt(date)}
+                    {date===todayStr() && <span style={{background:COLORS.lightBlue,color:COLORS.primaryBlue,padding:'1px 7px',borderRadius:10,fontSize:9}}>TODAY</span>}
+                  </div>
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    {dayTasks.map(t=>(
+                      <TaskRow key={t.id} t={t} onToggle={toggleTask} onEdit={openEditTask}
+                        onDelete={t=>setConfirmDelete({type:'task',id:t.id,label:t.title})}
+                        clientName={clientName(t.clientId)} />
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()}
+
+            {tasks.filter(t=>t.done).length>0 && (
+              <details style={{marginTop:8}}>
+                <summary>Completed ({tasks.filter(t=>t.done).length})</summary>
+                <div style={{display:'flex',flexDirection:'column',gap:8,marginTop:8}}>
+                  {tasks.filter(t=>t.done).map(t=>(
+                    <TaskRow key={t.id} t={t} onToggle={toggleTask} onEdit={openEditTask}
+                      onDelete={t=>setConfirmDelete({type:'task',id:t.id,label:t.title})}
+                      clientName={clientName(t.clientId)} showDate={true} />
+                  ))}
+                </div>
+              </details>
+            )}
+          </div>
+        )}
+
+        {/* CLIENTS */}
+        {view==='clients' && (
+          <div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+              <div>
+                <h1 style={{fontSize:22,fontWeight:700,color:COLORS.primaryBlue}}>Clients</h1>
+                <p style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.lightGray,letterSpacing:'0.06em',marginTop:2}}>{clients.length} record{clients.length!==1?'s':''}</p>
+              </div>
+              <button className="btn-primary" onClick={openAddClient}>+ Add Client</button>
+            </div>
+            {clients.length===0 ? (
+              <div className="card" style={{textAlign:'center',padding:'48px 0',color:COLORS.lightGray,fontStyle:'italic'}}>No clients yet. Add your first one above.</div>
+            ) : (
+              <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                {clients.map(c=>{
+                  const openCount = tasks.filter(t=>t.clientId===c.id&&!t.done).length;
+                  return (
+                    <div key={c.id} className="client-row">
+                      <div style={{width:36,height:36,borderRadius:'50%',background:COLORS.lightBlue,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontWeight:700,fontSize:14,color:COLORS.primaryBlue}}>
+                        {c.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                          <span style={{fontWeight:700,fontSize:14}}>{c.name}</span>
+                          {c.company && <span style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.midGray}}>{c.company}</span>}
+                          <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,padding:'1px 7px',borderRadius:10,background:c.status==='active'?'#e8f5e9':COLORS.cream,color:c.status==='active'?'#2e7d32':COLORS.lightGray,border:`1px solid ${c.status==='active'?'#a5d6a7':COLORS.borderGray}`}}>{c.status}</span>
+                          {openCount>0 && <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,padding:'1px 7px',borderRadius:10,background:COLORS.lightBlue,color:COLORS.primaryBlue,border:`1px solid #2E86C133`}}>{openCount} open task{openCount!==1?'s':''}</span>}
+                        </div>
+                        <div style={{display:'flex',gap:14,marginTop:3}}>
+                          {c.email && <span style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.midGray}}>{c.email}</span>}
+                          {c.phone && <span style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.midGray}}>{c.phone}</span>}
+                        </div>
+                        {c.notes && <div style={{fontSize:12,color:COLORS.midGray,fontStyle:'italic',marginTop:2}}>{c.notes}</div>}
+                      </div>
+                      <div style={{display:'flex',gap:2}}>
+                        <button className="icon-btn" onClick={()=>openEditClient(c)}>✎</button>
+                        <button className="icon-btn danger" onClick={()=>setConfirmDelete({type:'client',id:c.id,label:c.name})}>✕</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* RECURRING */}
+        {view==='recurring' && (
+          <div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
+              <div>
+                <h1 style={{fontSize:22,fontWeight:700,color:COLORS.primaryBlue}}>Recurring Tasks</h1>
+                <p style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:COLORS.lightGray,letterSpacing:'0.06em',marginTop:2}}>
+                  Auto-populate on their assigned days. Check them off on the dashboard each day.
+                </p>
+              </div>
+              <button className="btn-primary" onClick={openAddRecur}>+ Add Recurring</button>
+            </div>
+            <div style={{background:COLORS.lightBlue,borderLeft:`4px solid ${COLORS.midBlue}`,padding:'10px 16px',borderRadius:4,marginBottom:24,fontSize:13,color:COLORS.primaryBlue}}>
+              Recurring tasks reset each day. Checking one off on Monday does not affect Tuesday's list.
+            </div>
+            {DAYS.map((day,idx)=>{
+              const dayRecur = recurring.filter(r=>r.days.includes(idx));
+              if (!dayRecur.length) return null;
+              return (
+                <div key={day} style={{marginBottom:20}}>
+                  <div style={{fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:'0.1em',textTransform:'uppercase',color:COLORS.primaryBlue,marginBottom:8,display:'flex',alignItems:'center',gap:8}}>
+                    {day}<span style={{flex:1,height:1,background:COLORS.borderGray,display:'block'}}></span>
+                  </div>
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    {dayRecur.map(r=>(
+                      <div key={r.id} className="recur-row" style={{opacity:r.active?1:0.45}}>
+                        <div style={{flex:1}}>
+                          <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                            <span style={{fontSize:14,fontWeight:700}}>{r.title}</span>
+                            <Badge type={r.type} />
+                            {!r.active && <span style={{fontFamily:"'DM Mono',monospace",fontSize:9,color:COLORS.lightGray,padding:'1px 6px',border:`1px solid ${COLORS.borderGray}`,borderRadius:3}}>paused</span>}
+                          </div>
+                          {r.notes && <div style={{fontSize:12,color:COLORS.midGray,marginTop:3,fontStyle:'italic'}}>{r.notes}</div>}
+                        </div>
+                        <div style={{display:'flex',gap:4,flexShrink:0}}>
+                          <button className="icon-btn" onClick={()=>toggleRecurActive(r.id)} title={r.active?'Pause':'Resume'}>{r.active?'⏸':'▶'}</button>
+                          <button className="icon-btn" onClick={()=>openEditRecur(r)}>✎</button>
+                          <button className="icon-btn danger" onClick={()=>setConfirmDelete({type:'recurring',id:r.id,label:r.title})}>✕</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </main>
+
+      {/* TASK MODAL */}
+      {showTaskModal && (
+        <div className="modal-overlay" onClick={()=>setShowTaskModal(false)}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <h2 style={{fontSize:17,fontWeight:700,color:COLORS.primaryBlue,marginBottom:20}}>{editTask?'Edit Task':'New Task'}</h2>
+            <div style={{display:'flex',flexDirection:'column',gap:14}}>
+              <div><label className="label">Task</label><input className="input" value={taskForm.title} onChange={e=>setTaskForm(f=>({...f,title:e.target.value}))} placeholder="What needs to be done?" onKeyDown={e=>e.key==='Enter'&&saveTask()} /></div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                <div><label className="label">Type</label><select className="input" value={taskForm.type} onChange={e=>setTaskForm(f=>({...f,type:e.target.value}))}>{TASK_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}</select></div>
+                <div><label className="label">Due Date</label><input type="date" className="input" value={taskForm.dueDate} onChange={e=>setTaskForm(f=>({...f,dueDate:e.target.value}))} /></div>
+              </div>
+              {clients.length>0 && <div><label className="label">Client (optional)</label><select className="input" value={taskForm.clientId} onChange={e=>setTaskForm(f=>({...f,clientId:e.target.value}))}><option value="">No client</option>{clients.map(c=><option key={c.id} value={c.id}>{c.name}{c.company?` — ${c.company}`:''}</option>)}</select></div>}
+              <div><label className="label">Notes (optional)</label><textarea className="input" value={taskForm.notes} onChange={e=>setTaskForm(f=>({...f,notes:e.target.value}))} placeholder="Any context or details..." /></div>
+            </div>
+            <div style={{display:'flex',gap:8,marginTop:22,justifyContent:'flex-end'}}>
+              <button className="btn-ghost" onClick={()=>setShowTaskModal(false)}>Cancel</button>
+              <button className="btn-primary" onClick={saveTask}>{editTask?'Save Changes':'Add Task'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CLIENT MODAL */}
+      {showClientModal && (
+        <div className="modal-overlay" onClick={()=>setShowClientModal(false)}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <h2 style={{fontSize:17,fontWeight:700,color:COLORS.primaryBlue,marginBottom:20}}>{editClient?'Edit Client':'New Client'}</h2>
+            <div style={{display:'flex',flexDirection:'column',gap:14}}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                <div><label className="label">Name</label><input className="input" value={clientForm.name} onChange={e=>setClientForm(f=>({...f,name:e.target.value}))} placeholder="Contact name" /></div>
+                <div><label className="label">Company</label><input className="input" value={clientForm.company} onChange={e=>setClientForm(f=>({...f,company:e.target.value}))} placeholder="Company name" /></div>
+              </div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                <div><label className="label">Email</label><input className="input" type="email" value={clientForm.email} onChange={e=>setClientForm(f=>({...f,email:e.target.value}))} placeholder="email@example.com" /></div>
+                <div><label className="label">Phone</label><input className="input" value={clientForm.phone} onChange={e=>setClientForm(f=>({...f,phone:e.target.value}))} placeholder="(000) 000-0000" /></div>
+              </div>
+              <div><label className="label">Status</label><select className="input" value={clientForm.status} onChange={e=>setClientForm(f=>({...f,status:e.target.value}))}><option value="active">Active</option><option value="prospect">Prospect</option><option value="inactive">Inactive</option></select></div>
+              <div><label className="label">Notes (optional)</label><textarea className="input" value={clientForm.notes} onChange={e=>setClientForm(f=>({...f,notes:e.target.value}))} placeholder="Anything worth remembering..." /></div>
+            </div>
+            <div style={{display:'flex',gap:8,marginTop:22,justifyContent:'flex-end'}}>
+              <button className="btn-ghost" onClick={()=>setShowClientModal(false)}>Cancel</button>
+              <button className="btn-primary" onClick={saveClient}>{editClient?'Save Changes':'Add Client'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* RECURRING MODAL */}
+      {showRecurModal && (
+        <div className="modal-overlay" onClick={()=>setShowRecurModal(false)}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <h2 style={{fontSize:17,fontWeight:700,color:COLORS.primaryBlue,marginBottom:20}}>{editRecur?'Edit Recurring Task':'New Recurring Task'}</h2>
+            <div style={{display:'flex',flexDirection:'column',gap:14}}>
+              <div><label className="label">Task</label><input className="input" value={recurForm.title} onChange={e=>setRecurForm(f=>({...f,title:e.target.value}))} placeholder="What recurs?" /></div>
+              <div><label className="label">Type</label><select className="input" value={recurForm.type} onChange={e=>setRecurForm(f=>({...f,type:e.target.value}))}>{TASK_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}</select></div>
+              <div>
+                <label className="label">Repeats on</label>
+                <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:4}}>
+                  {DAYS.map((day,idx)=>(
+                    <button key={day} onClick={()=>toggleRecurDay(idx)} style={{fontFamily:"'DM Mono',monospace",fontSize:11,padding:'5px 12px',borderRadius:4,border:`1px solid ${recurForm.days.includes(idx)?COLORS.primaryBlue:COLORS.borderGray}`,background:recurForm.days.includes(idx)?COLORS.lightBlue:'white',color:recurForm.days.includes(idx)?COLORS.primaryBlue:COLORS.midGray,cursor:'pointer',transition:'all 0.12s'}}>{day}</button>
+                  ))}
+                </div>
+                {recurForm.days.length===0 && <p style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:COLORS.russet,marginTop:4}}>Select at least one day.</p>}
+              </div>
+              <div><label className="label">Notes / reminder (optional)</label><textarea className="input" value={recurForm.notes} onChange={e=>setRecurForm(f=>({...f,notes:e.target.value}))} placeholder="Time estimate, tips, or reminders..." /></div>
+            </div>
+            <div style={{display:'flex',gap:8,marginTop:22,justifyContent:'flex-end'}}>
+              <button className="btn-ghost" onClick={()=>setShowRecurModal(false)}>Cancel</button>
+              <button className="btn-primary" onClick={saveRecur} style={{opacity:recurForm.days.length===0?0.5:1}}>{editRecur?'Save Changes':'Add Recurring'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CONFIRM DELETE */}
+      {confirmDelete && (
+        <div className="modal-overlay" onClick={()=>setConfirmDelete(null)}>
+          <div className="modal" style={{maxWidth:380}} onClick={e=>e.stopPropagation()}>
+            <h2 style={{fontSize:16,fontWeight:700,color:COLORS.darkText,marginBottom:10}}>Delete {confirmDelete.type}?</h2>
+            <p style={{fontSize:14,color:COLORS.midGray,marginBottom:20}}>"<strong>{confirmDelete.label}</strong>" will be permanently removed. This cannot be undone.</p>
+            <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+              <button className="btn-ghost" onClick={()=>setConfirmDelete(null)}>Cancel</button>
+              <button className="btn-russet" onClick={()=>{
+                if (confirmDelete.type==='task') deleteTask(confirmDelete.id);
+                else if (confirmDelete.type==='client') deleteClient(confirmDelete.id);
+                else if (confirmDelete.type==='recurring') deleteRecur(confirmDelete.id);
+              }}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Automation</p>
-        <p class="service-name">Systems Setup</p>
-        <p class="service-desc">You've got the tools, they're just not talking to each other. I'll connect and configure your existing platforms so your workflow actually flows.</p>
-        <p class="service-includes">Setup, testing, and a short walkthrough doc</p>
-      </div>
-      <div class="service-price">from $150</div>
-    </div>
-  </section>
-  <hr class="rule">
-  <section id="about" class="about">
-    <p class="section-label">About</p>
-    <p>Bluestem Systems is a one-person operation based in Central Texas. I work with small business owners who are good at what they do and overwhelmed by everything else — helping them get out from under their own paperwork so they can get back to the work they actually built the thing for.</p>
-  </section>
-  <hr class="rule">
-  <section id="contact">
-    <p class="section-label">Contact</p>
-    <p class="contact-intro">Not sure which service fits? Start with the audit. Or just reach out and describe what's not working — we'll figure it out from there.</p>
-    <form id="contact-form" action="https://formspree.io/f/xvzdezeg" method="POST">
-      <div class="form-row">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required autocomplete="name">
-      </div>
-      <div class="form-row">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
-      </div>
-      <div class="form-row">
-        <label for="business">Business name (optional)</label>
-        <input type="text" id="business" name="business">
-      </div>
-      <div class="form-row">
-        <label for="service">What sounds most useful?</label>
-        <select id="service" name="service">
-          <option value="">— not sure yet —</option>
-          <option value="audit">The Operations Audit ($200)</option>
-          <option value="handbook">The Starter Handbook ($500)</option>
-          <option value="sop">The SOP Sprint ($175)</option>
-          <option value="systems">Systems Setup (from $250)</option>
-          <option value="other">Something else</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label for="message">What's going on?</label>
-        <textarea id="message" name="message" placeholder="Describe what's overwhelming you or what you're trying to fix."></textarea>
-      </div>
-      <div class="form-submit">
-        <button type="submit" id="submit-btn" class="cta-btn">Send it ↗</button>
-      </div>
-      <p class="form-success" id="form-success">Got it — I'll be in touch soon.</p>
-      <p class="form-error" id="form-error">Something went wrong. Try emailing directly at contact@bluestem.systems.</p>
-    </form>
-    <script>
-      const form = document.getElementById('contact-form');
-      const btn = document.getElementById('submit-btn');
-      const success = document.getElementById('form-success');
-      const error = document.getElementById('form-error');
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        btn.disabled = true;
-        btn.textContent = 'Sending...';
-        try {
-          const res = await fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-          });
-          if (res.ok) {
-            form.reset();
-            form.style.display = 'none';
-            success.style.display = 'block';
-          } else {
-            throw new Error();
-          }
-        } catch {
-          error.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Send it ↗';
-        }
-      });
-    </script>
-  </section>
-  <footer>
-    <span class="footer-word">Bluestem Systems</span>
-    <span class="footer-loc">Central Texas &nbsp;·&nbsp; bluestem.systems</span>
-  </footer>
-</div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<!--
+════════════════════════════════════════════════════════════════
+  SETUP INSTRUCTIONS
+════════════════════════════════════════════════════════════════
+
+  STEP 1 — SET YOUR PASSPHRASE
+  ─────────────────────────────
+  The default passphrase is: Raymond2025!
+  To change it:
+  1. Go to https://emn178.github.io/online-tools/sha256.html
+  2. Type your new passphrase
+  3. Copy the SHA-256 hash
+  4. Replace the PASSPHRASE_HASH value near the top of this file
+
+  STEP 2 — SET UP GOOGLE DRIVE SYNC (optional but recommended)
+  ─────────────────────────────────────────────────────────────
+  Without this step, data saves to your browser only (no cross-device sync).
+  With this step, data lives in your Google Drive and syncs everywhere.
+
+  a) Go to https://console.cloud.google.com
+  b) Create a new project called "Bluestem CRM"
+  c) Enable the Google Drive API
+  d) Go to APIs & Services > Credentials
+  e) Create an API Key — paste it into GOOGLE_API_KEY above
+  f) Create an OAuth 2.0 Client ID (Web application type)
+     - Add your GitHub Pages URL to Authorized JavaScript Origins
+       e.g. https://bluestemsystems.github.io
+  g) Paste the Client ID into GOOGLE_CLIENT_ID above
+  h) Go to OAuth consent screen, add your Google account as a test user
+
+  STEP 3 — DEPLOY TO GITHUB
+  ──────────────────────────
+  Put this file at /crm/index.html in your Bluestem repo:
+
+    mkdir -p ~/Desktop/BluestemRepo/crm
+    cp ~/Downloads/index.html ~/Desktop/BluestemRepo/crm/index.html
+    cd ~/Desktop/BluestemRepo
+    git add crm/index.html
+    git commit -m "Add Bluestem CRM"
+    git push
+
+  Then access it at:
+    https://bluestemsystems.github.io/crm
+  or if custom domain is set up:
+    https://bluestem.systems/crm
+
+════════════════════════════════════════════════════════════════
+-->
 </body>
 </html>
