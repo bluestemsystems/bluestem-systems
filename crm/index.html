@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wildstar Weddings — CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:      #F7F3EB;
+  --cream-dark: #EDE8DF;
+  --rose:       #E7BBB0;
+  --rose-dark:  #D4957F;
+  --rose-light: #F5E2DC;
+  --gold:       #D1A65A;
+  --gold-light: #E8CEAB;
+  --gold-dark:  #A07830;
+  --sage:       #A8A76D;
+  --sage-light: #D4D3A6;
+  --sage-dark:  #787750;
+  --ink:        #2E3131;
+  --ink-mid:    #4A4F4F;
+  --ink-light:  #717878;
+  --border:     #D8D2C8;
+  --border-light: #EAE4DA;
+}
+
+html { font-size: 15px; }
+body {
+  background: var(--cream);
+  font-family: 'Raleway', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* HEADER */
+header {
+  background: var(--ink);
+  padding: 0 32px;
+  position: sticky; top: 0; z-index: 50;
+  border-bottom: 2px solid var(--gold-dark);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.wordmark-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+}
+.wordmark-sub {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+}
+
+nav { display: flex; gap: 2px; }
+.nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 3px;
+  color: #9AA0A0;
+  transition: all 0.15s;
+}
+.nav-btn:hover { color: var(--cream); background: rgba(255,255,255,0.08); }
+.nav-btn.active { color: var(--ink); background: var(--gold); }
+
+/* MAIN LAYOUT */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 32px;
+}
+
+/* TYPOGRAPHY */
+.section-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-light);
+}
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.page-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-light);
+  margin-top: 2px;
+}
+
+/* CARDS & SURFACES */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px 20px;
+}
+.card-elevated {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(46,49,49,0.07);
+}
+
+/* INPUTS */
+.input {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  background: white;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(209,166,90,0.15); }
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23717878' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-color: white;
+  padding-right: 30px;
+}
+textarea.input { resize: vertical; min-height: 70px; }
+.input-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-mid);
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* BUTTONS */
+.btn {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--ink); color: var(--cream); }
+.btn-primary:hover { background: var(--ink-mid); }
+.btn-gold { background: var(--gold); color: white; }
+.btn-gold:hover { background: var(--gold-dark); }
+.btn-ghost { background: transparent; color: var(--ink-mid); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--ink-mid); color: var(--ink); }
+.btn-danger { background: transparent; color: var(--rose-dark); border: 1px solid var(--rose); }
+.btn-danger:hover { background: var(--rose-light); }
+.btn-sm { padding: 5px 10px; font-size: 9.5px; }
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 3px;
+  color: var(--ink-light);
+  font-size: 13px;
+  transition: all 0.12s;
+  line-height: 1;
+}
+.icon-btn:hover { background: var(--cream-dark); color: var(--ink); }
+.icon-btn.danger:hover { background: var(--rose-light); color: var(--rose-dark); }
+
+/* MODAL */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(46,49,49,0.45);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: white;
+  border-radius: 8px;
+  padding: 28px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(46,49,49,0.25);
+}
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+
+/* DASHBOARD SECTIONS */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-mid);
+}
+.section-count {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-light);
+  background: var(--cream-dark);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+/* COUPLE ROWS */
+.couple-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 160px 110px 90px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--border-light);
+  background: white;
+  transition: all 0.13s;
+  margin-bottom: 5px;
+}
+.couple-row:hover {
+  border-color: var(--gold-light);
+  box-shadow: 0 2px 8px rgba(209,166,90,0.12);
+}
+.couple-row.done { opacity: 0.42; }
+
+.row-check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.row-check:hover { border-color: var(--gold); }
+.row-check.checked { background: var(--gold); border-color: var(--gold); }
+
+.row-main { min-width: 0; }
+.couple-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+.meta-item {
+  font-size: 10.5px;
+  color: var(--ink-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.action-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  text-align: center;
+}
+.action-script   { background: #EBF0E8; color: #4D6040; border: 1px solid #C5D3BF; }
+.action-review   { background: #EFF0E6; color: #5C5D30; border: 1px solid #D0D1A0; }
+.action-sales    { background: #FDF3EE; color: #8B4A30; border: 1px solid #EEC8B8; }
+.action-consult  { background: #EAE8F5; color: #3D3870; border: 1px solid #C0BCDF; }
+.action-ceremony { background: #FBF5E7; color: #7A5A1A; border: 1px solid #E0CA90; }
+.action-review2  { background: #FFF0E8; color: #7A4010; border: 1px solid #F0C8A0; }
+.action-default  { background: var(--cream-dark); color: var(--ink-mid); border: 1px solid var(--border); }
+
+.date-chip {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  text-align: right;
+}
+.date-chip.past { color: var(--rose-dark); }
+.date-chip.soon { color: var(--gold-dark); }
+
+.platform-emoji { font-size: 13px; flex-shrink: 0; }
+
+.status-pill {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+.status-booked   { background: #E8F0E3; color: #3D6030; border: 1px solid #BACED0; }
+.status-pending  { background: var(--cream-dark); color: var(--ink-light); border: 1px solid var(--border); }
+.status-complete { background: #EDE8F5; color: #4A3070; border: 1px solid #C8C0E0; }
+.status-declined { background: var(--rose-light); color: var(--rose-dark); border: 1px solid var(--rose); }
+
+/* STAT CARDS */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+.stat-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 14px 16px;
+  border-top: 3px solid;
+}
+.stat-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-light); margin-bottom: 6px; }
+.stat-number { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--ink); }
+.stat-sub { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+
+/* ALERTS */
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.alert-warning { background: #FDF3EE; border-left: 3px solid var(--rose-dark); color: var(--rose-dark); }
+
+/* DETAIL PANEL (couple expand) */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.detail-field { }
+.detail-field-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); margin-bottom: 2px; }
+.detail-field-value { font-size: 13px; color: var(--ink); }
+
+/* CHECKLIST ITEMS */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 12.5px;
+  color: var(--ink-mid);
+}
+.check-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check-dot.yes { background: var(--sage); border-color: var(--sage); }
+.check-dot.yes::after { content: '✓'; color: white; font-size: 8px; font-weight: 700; }
+
+/* FORM GRID */
+.form-grid { display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: grid; gap: 12px; }
+.form-row-2 { grid-template-columns: 1fr 1fr; }
+.form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* PIPELINE TABLE VIEW */
+.table-row-header {
+  display: grid;
+  grid-template-columns: 28px 1fr 155px 105px 85px;
+  gap: 12px;
+  padding: 6px 14px;
+}
+.th {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-light);
+}
+
+/* SEARCH BAR */
+.search-wrap { position: relative; }
+.search-wrap input { padding-left: 30px; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ink-light); font-size: 13px; pointer-events: none; }
+
+/* TABS (filter pills) */
+.filter-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+.filter-pill {
+  font-family: 'Raleway', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  padding: 4px 10px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: white;
+  color: var(--ink-mid);
+  transition: all 0.12s;
+}
+.filter-pill:hover { border-color: var(--gold-light); }
+.filter-pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+/* DIVIDER */
+.divider { border: none; border-top: 1px solid var(--border-light); margin: 16px 0; }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--ink-light);
+  font-style: italic;
+  font-size: 13px;
+}
+
+details summary { list-style: none; cursor: pointer; }
+details summary::-webkit-details-marker { display: none; }
+
+.expand-row {
+  background: var(--cream);
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  padding: 14px 16px;
+  margin-top: -6px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 800px) {
+  .couple-row { grid-template-columns: 28px 1fr 110px; }
+  .couple-row > *:nth-child(4), .couple-row > *:nth-child(5) { display: none; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  main { padding: 18px 16px; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+
+const STAGES = [
+  { stage: "Finalize Script",           order: 1,  focus: "📝 Script",   offset: -39 },
+  { stage: "Start Script",              order: 2,  focus: "📝 Script",   offset: -40 },
+  { stage: "Print Script",             order: 3,  focus: "📝 Script",   offset: -2  },
+  { stage: "Review Questionnaire",     order: 4,  focus: "📋 Review"              },
+  { stage: "Send Questionnaire",       order: 5,  focus: "💌 Sales"               },
+  { stage: "Schedule / Complete Consult", order: 6, focus: "📅 Consult", offset: -21 },
+  { stage: "Purchase / Confirm Props", order: 7,  focus: "🎉 Ceremony", offset: -21 },
+  { stage: "Follow Up #1",             order: 8,  focus: "💌 Sales",    offset: 2   },
+  { stage: "Follow Up #2",             order: 9,  focus: "💌 Sales",    offset: 4   },
+  { stage: "Follow Up #3",             order: 10, focus: "💌 Sales",    offset: 6   },
+  { stage: "Send Review Request",      order: 11, focus: "⭐ Review",   offset: 2   },
+  { stage: "Close or Release",         order: 12, focus: "💌 Sales",    offset: 6   },
+  { stage: "Awaiting Questionnaire",   order: 13, focus: "💌 Sales"               },
+  { stage: "Ready for Ceremony",       order: 14, focus: "🎉 Ceremony"             },
+  { stage: "Mark Booked",              order: 15, focus: "💌 Sales"               },
+];
+
+const STATUSES = ["Booked", "Pending", "Complete", "Declined"];
+const PACKAGES = ["Signature Only", "Simple Signing", "Intimate Ceremony", "Signature Ceremony", "Destination", "Chapel Dulcinea"];
+const PLATFORMS = ["WeddingPro", "WeddingWire", "The Knot", "Zola", "Thumbtack", "GigSalad", "Direct / Website / Unknown", "Bark", "Instagram", "Facebook", "Google", "Referral"];
+
+const PLATFORM_EMOJI = {
+  "WeddingPro":"💍","WeddingWire":"💍","The Knot":"💍",
+  "Zola":"💙","Thumbtack":"📌","GigSalad":"🥗",
+  "Direct / Website / Unknown":"🌐","Bark":"🐕","Instagram":"📷",
+  "Facebook":"📘","Google":"🔎","Referral":"✨"
+};
+
+const uid = () => Math.random().toString(36).slice(2,10);
+const today = () => new Date().toISOString().slice(0,10);
+const fmtDate = d => d ? new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+const fmtDateShort = d => d ? new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const diff = new Date(dateStr+'T00:00:00') - new Date(today()+'T00:00:00');
+  return Math.round(diff / 86400000);
+}
+
+function getActionClass(action) {
+  if (!action) return 'action-default';
+  const a = action.toLowerCase();
+  if (a.includes('script') || a.includes('print') || a.includes('finalize')) return 'action-script';
+  if (a.includes('review')) return 'action-review';
+  if (a.includes('consult')) return 'action-consult';
+  if (a.includes('ceremony') || a.includes('props')) return 'action-ceremony';
+  if (a.includes('⭐') || a.includes('star')) return 'action-review2';
+  if (a.includes('follow') || a.includes('sales') || a.includes('booked') || a.includes('questionnaire') || a.includes('close') || a.includes('release')) return 'action-sales';
+  return 'action-default';
+}
+
+function getFocusFromAction(action) {
+  const match = STAGES.find(s => s.stage === action);
+  return match ? match.focus : '';
+}
+
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+
+// ─── GOOGLE DRIVE SYNC ───────────────────────────────────────────────────────
+
+const CLIENT_ID = '1015871865017-4r44mkq64mfigv2gcoonjt7rfkld1pg8.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
+const FILE_NAME = 'wildstar-crm-data.json';
+
+let driveFileId = null;
+
+async function getDriveToken() {
+  return new Promise((resolve, reject) => {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: (resp) => {
+        if (resp.error) reject(resp.error);
+        else resolve(resp.access_token);
+      },
+    });
+    client.requestAccessToken({ prompt: '' });
+  });
+}
+
+async function findOrCreateFile(token) {
+  // Search appDataFolder for existing file
+  const search = await fetch(
+    `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D%27${FILE_NAME}%27&fields=files(id,name)`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  const result = await search.json();
+  if (result.files && result.files.length > 0) {
+    driveFileId = result.files[0].id;
+    return driveFileId;
+  }
+  // Create new file
+  const meta = await fetch('https://www.googleapis.com/drive/v3/files', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: FILE_NAME, parents: ['appDataFolder'] }),
+  });
+  const created = await meta.json();
+  driveFileId = created.id;
+  return driveFileId;
+}
+
+async function loadFromDrive(token) {
+  const fileId = await findOrCreateFile(token);
+  const res = await fetch(
+    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (!res.ok) return null;
+  const text = await res.text();
+  if (!text || text.trim() === '') return null;
+  try { return JSON.parse(text); } catch { return null; }
+}
+
+async function saveToDrive(token, data) {
+  const fileId = driveFileId || await findOrCreateFile(token);
+  await fetch(
+    `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,
+    {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }
+  );
+}
+
+// localStorage fallback (used when not signed in)
+function useStorage(key, init) {
+  const [val, setVal] = useState(() => {
+    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : init; } catch { return init; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+  }, [key, val]);
+  return [val, setVal];
+}
+
+// ─── SAMPLE DATA ─────────────────────────────────────────────────────────────
+
+const SAMPLE_COUPLES = [
+  // ── BOOKED ──────────────────────────────────────────────────────────────────
+  { id:'s1',  status:'Booked',    couple:'Ahtajuana & Adrián',      email:'ahtajuana@gmail.com',              phone:'(512) 945-3816', ceremonyDate:'2026-05-23', platform:'Zola',                        package:'Intimate Ceremony',  location:'Hutto, TX — One Eleven East',                    nextAction:'Ready for Ceremony',        notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:200, guestCount:'130',   dateReceived:'2026-02-24' },
+  { id:'s2',  status:'Booked',    couple:'Samuel & Jessica',         email:'samflores95@gmail.com',            phone:'',              ceremonyDate:'2026-09-26', platform:'Direct / Website / Unknown',  package:'Signature Ceremony', location:'Garner State Park',                               nextAction:'Start Script',              notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'D', quoted:350, guestCount:'70-75', dateReceived:'2026-02-07' },
+  { id:'s3',  status:'Booked',    couple:'Kayla Rodriguez',          email:'kayla.rodriguez112@gmail.com',     phone:'210-418-0066', ceremonyDate:'2026-10-10', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Luling, TX',                                      nextAction:'Start Script',              notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'D', quoted:200, guestCount:'0-50',  dateReceived:'2026-04-16' },
+  { id:'s4',  status:'Booked',    couple:'Kara R.',                  email:'kararazavi10@gmail.com',           phone:'574-025-5481', ceremonyDate:'2026-11-19', platform:'Thumbtack',                   package:'Intimate Ceremony',  location:"Remi's Ridge, Spring Branch TX",                  nextAction:'Start Script',              notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'D', quoted:200, guestCount:'56',     dateReceived:'2026-03-31' },
+  { id:'s5',  status:'Booked',    couple:'Darby & Hayden',           email:'dfromatx@gmail.com',               phone:'512-720-2585', ceremonyDate:'2026-12-19', platform:'Zola',                        package:'Intimate Ceremony',  location:'Villa at the Vineyard, Driftwood TX',             nextAction:'Start Script',              notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'D', quoted:200, guestCount:'64',     dateReceived:'2026-04-03' },
+  { id:'s6',  status:'Booked',    couple:'Whitney & Cole',           email:'whitney2313@icloud.com',           phone:'',             ceremonyDate:'2027-03-25', platform:'WeddingPro',                  package:'Chapel Dulcinea',    location:'Chapel Dulcinea',                                 nextAction:'Start Script',              notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'D', quoted:125, guestCount:'',       dateReceived:'2026-03-26' },
+  // ── COMPLETE ─────────────────────────────────────────────────────────────────
+  { id:'s8',  status:'Complete',  couple:'Jose & Melinda',           email:'jghernandezny@gmail.com',          phone:'518-694-2405', ceremonyDate:'2026-04-25', platform:'WeddingWire',                 package:'Intimate Ceremony',  location:'Kyle, TX',                                        nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:200, guestCount:'',      dateReceived:'2026-03-18' },
+  { id:'s9',  status:'Complete',  couple:'Bessie & Ray',             email:'bessie.irizarry@gmail.com',        phone:'210-845-8840', ceremonyDate:'2026-05-08', platform:'Thumbtack',                   package:'Simple Signing',     location:'New Braunfels, TX',                               nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:75,  guestCount:'5',      dateReceived:'2026-04-09' },
+  { id:'s10', status:'Complete',  couple:'William & Alexandria',     email:'will.wilkins@gmail.com',           phone:'210-262-0850', ceremonyDate:'2026-05-09', platform:'GigSalad',                    package:'Intimate Ceremony',  location:'The Oaks at Heavenly, Helotes TX',                nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:275, guestCount:'200',    dateReceived:'2026-03-17' },
+  { id:'s11', status:'Complete',  couple:'Shelby & Wesley',          email:'210uwu22137@gmail.com',            phone:'210-748-7005', ceremonyDate:'2026-05-18', platform:'Thumbtack',                   package:'Signature Ceremony', location:'Universal City, TX',                              nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'D', quoted:350, guestCount:'21-50',  dateReceived:'2026-02-20' },
+  { id:'s12', status:'Complete',  couple:'Maia & Vincent',           email:'maiapauline.reyes@yahoo.com',      phone:'971-330-4402', ceremonyDate:'2026-05-18', platform:'WeddingPro',                  package:'Simple Signing',     location:'Chapel Dulcinea',                                 nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:125, guestCount:'6',      dateReceived:'2026-03-23' },
+  { id:'s13', status:'Complete',  couple:'Eric Nave',                email:'',                                 phone:'760-908-2117', ceremonyDate:'2026-04-24', platform:'Direct / Website / Unknown',  package:'Simple Signing',     location:'Kyle, TX',                                        nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:75,  guestCount:'5',      dateReceived:'2026-05-11' },
+  { id:'s14', status:'Complete',  couple:'Mario Morquecho',          email:'',                                 phone:'',             ceremonyDate:'2026-02-19', platform:'Thumbtack',                   package:'Simple Signing',     location:'Tea Garden SA',                                   nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:false, scriptStart:true,  scriptComplete:true,  scriptPrinted:false, reviewRequestSent:true,  depositPaid:'P', quoted:75,  guestCount:'1',      dateReceived:'2026-02-08' },
+  { id:'s15', status:'Complete',  couple:'Brenda Yanez',             email:'form-submission@squarespace.info', phone:'210-852-7149', ceremonyDate:'2026-02-21', platform:'Direct / Website / Unknown',  package:'Simple Signing',     location:'San Antonio',                                     nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:false, scriptStart:true,  scriptComplete:true,  scriptPrinted:false, reviewRequestSent:true,  depositPaid:'P', quoted:75,  guestCount:'0',      dateReceived:'2026-03-18' },
+  { id:'s16', status:'Complete',  couple:'Julia Andreassa',          email:'',                                 phone:'',             ceremonyDate:'2026-02-22', platform:'Thumbtack',                   package:'Simple Signing',     location:'Landa Park',                                      nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:false, scriptStart:true,  scriptComplete:true,  scriptPrinted:false, reviewRequestSent:true,  depositPaid:'P', quoted:75,  guestCount:'0',      dateReceived:'2026-02-25' },
+  { id:'s17', status:'Complete',  couple:'Deborah Deollos',          email:'',                                 phone:'',             ceremonyDate:'2026-03-10', platform:'Thumbtack',                   package:'Simple Signing',     location:'Office',                                          nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:false, scriptStart:true,  scriptComplete:true,  scriptPrinted:false, reviewRequestSent:true,  depositPaid:'P', quoted:55,  guestCount:'0',      dateReceived:'2026-03-04' },
+  { id:'s18', status:'Complete',  couple:'Shelley Luster',           email:'info@shelleyluster.com',           phone:'737-888-9484', ceremonyDate:'2026-02-14', platform:'WeddingPro',                  package:'Simple Signing',     location:'Office',                                          nextAction:'Send Review Request',       notes:'speech selection', questionnaireSent:true, questionnaireReturned:true, consultCompleted:false, scriptStart:true, scriptComplete:true, scriptPrinted:false, reviewRequestSent:true, depositPaid:'P', quoted:75, guestCount:'0', dateReceived:'2026-02-05' },
+  { id:'s19', status:'Complete',  couple:'Brianna & Jake',           email:'bdulock18@gmail.com',              phone:'254-707-1654', ceremonyDate:'2026-02-26', platform:'WeddingPro',                  package:'Simple Signing',     location:'Chapel Dulcinea',                                 nextAction:'Send Review Request',       notes:'review', questionnaireSent:true, questionnaireReturned:true, consultCompleted:false, scriptStart:true, scriptComplete:true, scriptPrinted:false, reviewRequestSent:true, depositPaid:'P', quoted:125, guestCount:'0', dateReceived:'2026-01-30' },
+  { id:'s20', status:'Complete',  couple:'Erin Won',                 email:'flora00600@gmail.com',             phone:'540-449-2221', ceremonyDate:'2026-03-07', platform:'WeddingPro',                  package:'Simple Signing',     location:'Office',                                          nextAction:'Send Review Request',       notes:'review', questionnaireSent:true, questionnaireReturned:true, consultCompleted:false, scriptStart:true, scriptComplete:true, scriptPrinted:false, reviewRequestSent:true, depositPaid:'P', quoted:75, guestCount:'0', dateReceived:'2026-02-06' },
+  { id:'s21', status:'Complete',  couple:'Moriah Gutierrez',         email:'',                                 phone:'575-937-4073', ceremonyDate:'2026-03-07', platform:'Thumbtack',                   package:'Intimate Ceremony',  location:'Boerne, TX',                                      nextAction:'Send Review Request',       notes:'review', questionnaireSent:true, questionnaireReturned:true, consultCompleted:true,  scriptStart:true, scriptComplete:true, scriptPrinted:false, reviewRequestSent:true, depositPaid:'P', quoted:200, guestCount:'21-50', dateReceived:'2026-02-06' },
+  { id:'s22', status:'Complete',  couple:'Colleen Nicholas',         email:'cbnc33@comcast.net',               phone:'832-621-7226', ceremonyDate:'2026-03-08', platform:'Thumbtack',                   package:'Intimate Ceremony',  location:'Memory Lane Ranch, Dripping Springs',             nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:200, guestCount:'55',     dateReceived:'2026-02-21' },
+  { id:'s23', status:'Complete',  couple:'Jessica & Andrew',         email:'jessica.castro9313@gmail.com',     phone:'',             ceremonyDate:'2026-03-10', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Chapel Dulcinea',                                 nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:200, guestCount:'40',     dateReceived:'2026-03-22' },
+  { id:'s24', status:'Complete',  couple:'Veronica & Luis',          email:'vvveronicaa@yahoo.com',            phone:'',             ceremonyDate:'2026-03-13', platform:'WeddingPro',                  package:'Simple Signing',     location:'Dripping Springs, TX',                            nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:113, guestCount:'4',      dateReceived:'2026-03-19' },
+  { id:'s25', status:'Complete',  couple:'Adam & Michelle',          email:'adam.delong@icloud.com',           phone:'512-612-8312', ceremonyDate:'2026-03-18', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Memory Lane Ranch, Dripping Springs',             nextAction:'Send Review Request',       notes:'handfasting cord', questionnaireSent:true, questionnaireReturned:true, consultCompleted:true, scriptStart:true, scriptComplete:true, scriptPrinted:true, reviewRequestSent:true, depositPaid:'P', quoted:182, guestCount:'50-100', dateReceived:'2026-01-29' },
+  { id:'s26', status:'Complete',  couple:'Rebecca & Cody',           email:'lopezrebecca33@yahoo.com',         phone:'407-848-9390', ceremonyDate:'2026-03-20', platform:'WeddingPro',                  package:'Chapel Dulcinea',    location:'Chapel Dulcinea',                                 nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:125, guestCount:'',       dateReceived:'2026-03-22' },
+  { id:'s27', status:'Complete',  couple:'Carmen Castro',            email:'carmen98castro@gmail.com',         phone:'512-822-3639', ceremonyDate:'2026-04-02', platform:'WeddingPro',                  package:'Signature Only',     location:'NB Coffee',                                       nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:true,  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'',  quoted:55,  guestCount:'',       dateReceived:'2026-04-21' },
+  { id:'s28', status:'Complete',  couple:'Mj Rao',                   email:'chikyala.manojrao@gmail.com',      phone:'832-951-5643', ceremonyDate:'2026-04-11', platform:'Thumbtack',                   package:'Simple Signing',     location:'Leander, TX',                                     nextAction:'Send Review Request',       notes:'', questionnaireSent:true,  questionnaireReturned:true,  consultCompleted:true,  scriptStart:true,  scriptComplete:true,  scriptPrinted:true,  reviewRequestSent:true,  depositPaid:'P', quoted:167, guestCount:'2',      dateReceived:'2026-04-29' },
+  // ── PENDING ───────────────────────────────────────────────────────────────────
+  { id:'s29', status:'Pending',   couple:'Martha G & James T',       email:'',                                 phone:'',             ceremonyDate:'2026-09-05', platform:'Zola',                        package:'',                   location:'Luling, TX',                                      nextAction:'Follow Up #1',              notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0,   guestCount:'',       dateReceived:'2026-05-16' },
+  // ── DECLINED ──────────────────────────────────────────────────────────────────
+  { id:'d1',  status:'Declined',  couple:'(unnamed)',                 email:'wren@wildstarweddings.com',        phone:'830-282-4090', ceremonyDate:'2026-02-26', platform:'WeddingWire',                 package:'Simple Signing',     location:'Boerne, TX',                                      nextAction:'',                          notes:'SPAM', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0,   guestCount:'',       dateReceived:'2026-03-17' },
+  { id:'d2',  status:'Declined',  couple:'Israel Zuniga',            email:'isr.zuniga26@gmail.com',           phone:'469-387-7283', ceremonyDate:'2026-03-07', platform:'Direct / Website / Unknown',  package:'Simple Signing',     location:'Landa Park',                                      nextAction:'',                          notes:'Reschedule', questionnaireSent:true, questionnaireReturned:true, consultCompleted:true, scriptStart:true, scriptComplete:true, scriptPrinted:false, reviewRequestSent:false, depositPaid:'P', quoted:120, guestCount:'12', dateReceived:'2026-03-09' },
+  { id:'d3',  status:'Declined',  couple:'(unnamed)',                 email:'avila.marimar@gmail.com',          phone:'830-534-4668', ceremonyDate:'2026-03-07', platform:'WeddingWire',                 package:'',                   location:'',                                                nextAction:'',                          notes:'Reply in WeddingWire', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-02-16' },
+  { id:'d4',  status:'Declined',  couple:'Haley Ann',                email:'joneslilly1@icloud.com',           phone:'',             ceremonyDate:'2026-03-12', platform:'WeddingWire',                 package:'',                   location:'',                                                nextAction:'',                          notes:'4th on 5th', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-02-15' },
+  { id:'d5',  status:'Declined',  couple:'Dan Rawls',                email:'dmrawlsiv@gmail.com',              phone:'409-223-3027', ceremonyDate:'2026-03-19', platform:'Direct / Website / Unknown',  package:'Simple Signing',     location:'Landa Park',                                      nextAction:'',                          notes:'script', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'D', quoted:75, guestCount:'', dateReceived:'2026-02-22' },
+  { id:'d6',  status:'Declined',  couple:'Darrian Miller',           email:'darrian.miller713@gmail.com',      phone:'832-589-5047', ceremonyDate:'2026-03-20', platform:'WeddingWire',                 package:'',                   location:'Pennybacker Bridge, Austin',                      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'136', dateReceived:'2026-03-18' },
+  { id:'d7',  status:'Declined',  couple:'Anora Razakova',           email:'anorarazakova2557@gmail.com',      phone:'347-915-8866', ceremonyDate:'2026-04-04', platform:'WeddingPro',                  package:'',                   location:'Chevy Chase, MD',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'6', dateReceived:'2026-03-30' },
+  { id:'d8',  status:'Declined',  couple:'Amyah Merkerson',          email:'msmerk03@gmail.com',               phone:'470-836-5996', ceremonyDate:'2026-04-06', platform:'WeddingPro',                  package:'',                   location:'Chevy Chase, MD',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-04' },
+  { id:'d9',  status:'Declined',  couple:'Liberty Pinon',            email:'libertymay00@gmail.com',           phone:'956-359-7632', ceremonyDate:'2026-04-08', platform:'WeddingWire',                 package:'',                   location:'Chapel Dulcinea',                                 nextAction:'',                          notes:'Reply in WeddingWire', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-03-07' },
+  { id:'d10', status:'Declined',  couple:'Jeramy & Mallory',         email:'mallorychokas@gmail.com',          phone:'817-965-0163', ceremonyDate:'2026-04-10', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Fredericksburg, TX',                              nextAction:'',                          notes:'4th on 5th', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'51-100', dateReceived:'2026-02-09' },
+  { id:'d11', status:'Declined',  couple:'Madisyn & Jaden',          email:'madijadenmyers@outlook.com',       phone:'505-328-6033', ceremonyDate:'2026-04-10', platform:'Zola',                        package:'Intimate Ceremony',  location:'Bulverde, TX',                                    nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'100', dateReceived:'2026-03-08' },
+  { id:'d12', status:'Declined',  couple:'Brandi',                   email:'bgarcia2188@icloud.com',           phone:'512-636-2092', ceremonyDate:'2026-04-16', platform:'WeddingPro',                  package:'',                   location:'Chevy Chase, MD',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-06' },
+  { id:'d13', status:'Declined',  couple:'Vanessa Galviz',           email:'vane.villa.1@gmail.com',           phone:'512-552-6626', ceremonyDate:'2026-04-18', platform:'WeddingPro',                  package:'',                   location:'Chevy Chase, MD',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-07' },
+  { id:'d14', status:'Declined',  couple:'Brooklyn Hicks',           email:'sorenhicks04@gmail.com',           phone:'586-741-2160', ceremonyDate:'2026-04-18', platform:'WeddingPro',                  package:'',                   location:'No venue, just papers signed',                    nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-17' },
+  { id:'d15', status:'Declined',  couple:'Kayla M.',                 email:'',                                 phone:'',             ceremonyDate:'2026-04-21', platform:'Thumbtack',                   package:'',                   location:'San Antonio, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-17' },
+  { id:'d16', status:'Declined',  couple:'Tommi Hurlock',            email:'',                                 phone:'210-707-7767', ceremonyDate:'2026-04-23', platform:'Thumbtack',                   package:'',                   location:'San Antonio, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-17' },
+  { id:'d17', status:'Declined',  couple:'Alessandra Margello',      email:'',                                 phone:'',             ceremonyDate:'2026-04-30', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'The Addison Grove, Austin TX',                    nextAction:'',                          notes:'4th on 5th', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:250, guestCount:'100-150', dateReceived:'2026-02-10' },
+  { id:'d18', status:'Declined',  couple:'Bayli Bilbo',              email:'baaylib@icloud.com',               phone:'',             ceremonyDate:'2026-05-03', platform:'WeddingPro',                  package:'',                   location:'',                                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-20' },
+  { id:'d19', status:'Declined',  couple:'Oc Osagie',                email:'ocosagie@yahoo.com',               phone:'512-435-7481', ceremonyDate:'2026-05-08', platform:'WeddingPro',                  package:'',                   location:'Round Rock, TX',                                  nextAction:'',                          notes:'4th on 5th', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-02-07' },
+  { id:'d20', status:'Declined',  couple:'Donna Garcia',             email:'form-submission@squarespace.info', phone:'469-873-7113', ceremonyDate:'2026-05-09', platform:'Direct / Website / Unknown',  package:'',                   location:'New Braunfels, TX',                               nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'50-100', dateReceived:'2026-03-18' },
+  { id:'d21', status:'Declined',  couple:'Barbara E.',               email:'',                                 phone:'',             ceremonyDate:'2026-05-09', platform:'Thumbtack',                   package:'',                   location:'Cibolo, TX',                                      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-08' },
+  { id:'d22', status:'Declined',  couple:'Lisa Wood',                email:'lisawood0912@gmail.com',           phone:'',             ceremonyDate:'2026-05-09', platform:'Direct / Website / Unknown',  package:'Simple Signing',     location:'Texas City, TX',                                  nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:445, guestCount:'10', dateReceived:'2026-04-25' },
+  { id:'d23', status:'Declined',  couple:'Franceska & Jeffery',      email:'franceskajohs24@gmail.com',        phone:'210-845-4797', ceremonyDate:'2026-05-14', platform:'Zola',                        package:'Intimate Ceremony',  location:'The Millstone, New Braunfels',                    nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'', dateReceived:'2026-03-25' },
+  { id:'d24', status:'Declined',  couple:'Rachel Pierson',           email:'rachel.j.pierson@gmail.com',       phone:'808-333-0088', ceremonyDate:'2026-05-22', platform:'Direct / Website / Unknown',  package:'Intimate Ceremony',  location:'Lady Bird Wildflower Center',                     nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'40', dateReceived:'2026-03-16' },
+  { id:'d25', status:'Declined',  couple:'Joann Hernandez',          email:'',                                 phone:'512-620-2247', ceremonyDate:'2026-05-22', platform:'Thumbtack',                   package:'Intimate Ceremony',  location:'Maxwell, TX',                                     nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:229, guestCount:'51', dateReceived:'2026-03-23' },
+  { id:'d26', status:'Declined',  couple:'Amanda Brant',             email:'amandabrantflores@gmail.com',      phone:'512-350-5216', ceremonyDate:'2026-06-05', platform:'Direct / Website / Unknown',  package:'',                   location:'Garden Ridge, TX',                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-05' },
+  { id:'d27', status:'Declined',  couple:'Lizbeth Ledezma',          email:'lizbethldz1990@gmail.com',         phone:'494-852-8475', ceremonyDate:'2026-06-06', platform:'WeddingPro',                  package:'',                   location:'Casa privada',                                    nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-04' },
+  { id:'d28', status:'Declined',  couple:'Javier A.',                email:'',                                 phone:'200-210-5371', ceremonyDate:'2026-05-30', platform:'GigSalad',                    package:'',                   location:'Somerset, TX',                                    nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-01-12' },
+  { id:'d29', status:'Declined',  couple:'Maggie & Kushagra',        email:'magdaline97@gmail.com',            phone:'512-618-4145', ceremonyDate:'2026-06-19', platform:'Zola',                        package:'Intimate Ceremony',  location:'Driftwood, TX',                                   nextAction:'',                          notes:'checkin on 29th', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:220, guestCount:'130', dateReceived:'2026-02-12' },
+  { id:'d30', status:'Declined',  couple:'Renee Hartley',            email:'renee2dot@gmail.com',              phone:'210-687-5398', ceremonyDate:'2026-07-10', platform:'Direct / Website / Unknown',  package:'',                   location:'',                                                nextAction:'',                          notes:'Reply in platform', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-02-24' },
+  { id:'d31', status:'Declined',  couple:'Valerie G.',               email:'',                                 phone:'',             ceremonyDate:'2026-07-11', platform:'Thumbtack',                   package:'',                   location:'San Antonio, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-22' },
+  { id:'d32', status:'Declined',  couple:'Claudia Holguin',          email:'claudiaholguin27@yahoo.com',       phone:'877-331-7752', ceremonyDate:'2026-07-12', platform:'WeddingPro',                  package:'Chapel Dulcinea',    location:'Chapel Dulcinea',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:125, guestCount:'0-50', dateReceived:'2026-04-02' },
+  { id:'d33', status:'Declined',  couple:'Ramond Spencer',           email:'ramond1971@yahoo.com',             phone:'615-820-1717', ceremonyDate:'2026-08-28', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Marble, TX',                                      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'25', dateReceived:'2026-02-11' },
+  { id:'d34', status:'Declined',  couple:'Mia & Michael',            email:'mia.bendixsen1@outlook.com',       phone:'832-560-0730', ceremonyDate:'2026-09-26', platform:'Direct / Website / Unknown',  package:'',                   location:'',                                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-20' },
+  { id:'d35', status:'Declined',  couple:'Elizabeth & Tristan',      email:'elizabethtristanperezlindsey@gmail.com', phone:'210-574-8764', ceremonyDate:'2026-10-01', platform:'Zola',               package:'Signature Ceremony', location:'Enchanted Ranch, San Marcos',                     nextAction:'',                          notes:'VIDEO 02/11', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:350, guestCount:'', dateReceived:'2026-02-12' },
+  { id:'d36', status:'Declined',  couple:'Justice & Cesar',          email:'justice.shayne@gmail.com',         phone:'210-591-5276', ceremonyDate:'2026-10-14', platform:'Zola',                        package:'Intimate Ceremony',  location:'San Antonio, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'50', dateReceived:'2026-04-18' },
+  { id:'d37', status:'Declined',  couple:'William Iglesias',         email:'william.iglesias99@gmail.com',     phone:'512-365-9047', ceremonyDate:'2026-11-27', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Celebrino, Georgetown TX',                        nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'80', dateReceived:'2026-03-09' },
+  { id:'d38', status:'Declined',  couple:'Kaylee & Rj',              email:'kayleebaby888@icloud.com',         phone:'830-390-9020', ceremonyDate:'2026-11-27', platform:'Zola',                        package:'Intimate Ceremony',  location:'Seguin, TX',                                      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'40', dateReceived:'2026-03-08' },
+  { id:'d39', status:'Declined',  couple:'Sarah & Joseph',           email:'skwtx@hotmail.com',                phone:'210-685-1672', ceremonyDate:'2026-12-10', platform:'Zola',                        package:'',                   location:'Spring Branch, TX',                               nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-04-05' },
+  { id:'d40', status:'Declined',  couple:'Kristen & Greg',           email:'tschirhart04@gmail.com',           phone:'210-846-0854', ceremonyDate:'2027-02-04', platform:'Zola',                        package:'Intimate Ceremony',  location:'The Allen Farmhaus, New Braunfels',               nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'50', dateReceived:'2026-04-11' },
+  { id:'d41', status:'Declined',  couple:'Adams',                    email:'leads@gigsalad.com',               phone:'200-210-5371', ceremonyDate:'',            platform:'GigSalad',                    package:'',                   location:'San Antonio, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-03-25' },
+  { id:'d42', status:'Declined',  couple:'Eve Moncus',               email:'etmoncus@gmail.com',               phone:'512-433-9029', ceremonyDate:'2026-07-02', platform:'WeddingPro',                  package:'Simple Signing',     location:'Garrett & Mic Hill Event Center, Temple TX',      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:192, guestCount:'50', dateReceived:'2026-05-04' },
+  { id:'d43', status:'Declined',  couple:'Jordan Jenkins',           email:'tam.jenkins@yahoo.com',            phone:'',             ceremonyDate:'2026-12-10', platform:'WeddingPro',                  package:'',                   location:'Hudson Bend Ranch',                               nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-04' },
+  { id:'d44', status:'Declined',  couple:'Yolanda R.',               email:'',                                 phone:'',             ceremonyDate:'2027-01-26', platform:'Thumbtack',                   package:'',                   location:'Leander, TX',                                     nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-02' },
+  { id:'d45', status:'Declined',  couple:'Taylor O.',                email:'',                                 phone:'',             ceremonyDate:'2027-06-24', platform:'Thumbtack',                   package:'',                   location:'San Antonio, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-01' },
+  { id:'d46', status:'Declined',  couple:'Christina Regalado',       email:'c.eve.regalado@icloud.com',        phone:'925-812-4461', ceremonyDate:'2026-07-03', platform:'WeddingPro',                  package:'',                   location:'Noble Lake House',                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-11' },
+  { id:'d47', status:'Declined',  couple:'Elizabeth Reid',           email:'fesas.wedding@gmail.com',          phone:'512-767-9188', ceremonyDate:'2027-10-01', platform:'WeddingPro',                  package:'',                   location:'Lakeway, TX',                                     nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-12' },
+  { id:'d48', status:'Declined',  couple:'Sidney Griffin',           email:'sidneyg11@icloud.com',             phone:'404-518-5616', ceremonyDate:'2026-06-05', platform:'WeddingPro',                  package:'',                   location:'',                                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-12' },
+  { id:'d49', status:'Declined',  couple:'Elizabeth R.',             email:'',                                 phone:'',             ceremonyDate:'2027-10-01', platform:'GigSalad',                    package:'Intimate Ceremony',  location:'Springfield, MO',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:252, guestCount:'', dateReceived:'2026-05-13' },
+  { id:'d50', status:'Declined',  couple:'Andrea G.',                email:'',                                 phone:'',             ceremonyDate:'2026-05-16', platform:'Thumbtack',                   package:'',                   location:'Converse, TX',                                    nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-14' },
+  { id:'d51', status:'Declined',  couple:'CC',                       email:'',                                 phone:'',             ceremonyDate:'2026-07-17', platform:'Thumbtack',                   package:'Intimate Ceremony',  location:'Dale, TX',                                        nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:268, guestCount:'21-50', dateReceived:'2026-05-18' },
+  { id:'d52', status:'Declined',  couple:'Alex Vuong',               email:'avuong0119@gmail.com',             phone:'832-728-8890', ceremonyDate:'2026-06-05', platform:'WeddingPro',                  package:'',                   location:'Dallas, TX',                                      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'0-50', dateReceived:'2026-05-18' },
+  { id:'d53', status:'Declined',  couple:'Hayden Epperley',          email:'haydenepperley@gmail.com',         phone:'817-941-3435', ceremonyDate:'2026-05-24', platform:'WeddingPro',                  package:'',                   location:'Gatesville, TX',                                  nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-19' },
+  { id:'d54', status:'Declined',  couple:'Jessica Ramos',            email:'jessicaramosrdz@gmail.com',        phone:'',             ceremonyDate:'2026-07-30', platform:'WeddingPro',                  package:'',                   location:'Chapel Dulcinea',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-19' },
+  { id:'d55', status:'Declined',  couple:'Anessa Barron',            email:'barron_anessa88@yahoo.com',        phone:'512-709-3853', ceremonyDate:'2026-05-29', platform:'WeddingPro',                  package:'',                   location:'',                                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-22' },
+  { id:'d56', status:'Declined',  couple:'Jack S.',                  email:'',                                 phone:'',             ceremonyDate:'2026-05-22', platform:'Thumbtack',                   package:'',                   location:'Austin, TX',                                      nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-22' },
+  { id:'d57', status:'Declined',  couple:'Madison Brown',            email:'madisondelaney94@gmail.com',       phone:'945-344-5163', ceremonyDate:'2026-07-16', platform:'WeddingPro',                  package:'',                   location:'',                                                nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'', dateReceived:'2026-05-23' },
+  { id:'d58', status:'Declined',  couple:'Kate B.',                  email:'',                                 phone:'',             ceremonyDate:'2026-06-19', platform:'GigSalad',                    package:'Intimate Ceremony',  location:'Floresville, TX',                                 nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:200, guestCount:'50', dateReceived:'2026-05-25' },
+  { id:'d59', status:'Declined',  couple:'Julia Perez',              email:'juliaperezintexas@gmail.com',      phone:'877-331-7752', ceremonyDate:'2026-11-26', platform:'WeddingPro',                  package:'Intimate Ceremony',  location:'Wimberley, TX',                                   nextAction:'',                          notes:'', questionnaireSent:false, questionnaireReturned:false, consultCompleted:false, scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false, depositPaid:'', quoted:0, guestCount:'51-100', dateReceived:'2026-05-25' },
+];
+
+// ─── COMPONENTS ──────────────────────────────────────────────────────────────
+
+const Checkmark = () => (
+  <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+    <path d="M1 3l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+function ActionBadge({ action }) {
+  if (!action) return null;
+  const cls = getActionClass(action);
+  return <span className={`action-badge ${cls}`}>{action}</span>;
+}
+
+function StatusPill({ status }) {
+  const cls = { Booked:'status-booked', Pending:'status-pending', Complete:'status-complete', Declined:'status-declined' }[status] || 'status-pending';
+  return <span className={`status-pill ${cls}`}>{status}</span>;
+}
+
+function DateChip({ date }) {
+  if (!date) return <span className="date-chip" style={{color:'var(--border)'}}>—</span>;
+  const d = daysUntil(date);
+  let cls = '';
+  if (d !== null && d < 0) cls = 'past';
+  else if (d !== null && d <= 30) cls = 'soon';
+  return <span className={`date-chip ${cls}`}>{fmtDateShort(date)}</span>;
+}
+
+function CheckDot({ yes }) {
+  return <div className={`check-dot${yes?' yes':''}`} />;
+}
+
+function CoupleRow({ couple, onToggleDone, onEdit, onDelete, expanded, onToggleExpand }) {
+  const focus = getFocusFromAction(couple.nextAction);
+  const emoji = PLATFORM_EMOJI[couple.platform] || '🌐';
+  const done = couple.status === 'Complete' || couple.status === 'Declined';
+  return (
+    <>
+      <div className={`couple-row${done?' done':''}`} style={{cursor:'pointer'}} onClick={onToggleExpand}>
+        <div className={`row-check${done?' checked':''}`} onClick={e=>{e.stopPropagation();onToggleDone();}}>
+          {done && <Checkmark />}
+        </div>
+        <div className="row-main">
+          <div style={{display:'flex',alignItems:'center',gap:7}}>
+            <span className="platform-emoji">{emoji}</span>
+            <span className="couple-name">{couple.couple || '(unnamed)'}</span>
+          </div>
+          <div className="row-meta">
+            <span className="meta-item">📍 {couple.location || '—'}</span>
+            {couple.package && <span className="meta-item" style={{color:'var(--gold-dark)'}}>{couple.package}</span>}
+          </div>
+        </div>
+        <div><ActionBadge action={couple.nextAction} /></div>
+        <div style={{textAlign:'right'}}>
+          <DateChip date={couple.ceremonyDate} />
+          {couple.ceremonyDate && <div className="meta-item" style={{marginTop:2,textAlign:'right',fontSize:10}}>{daysUntil(couple.ceremonyDate) !== null && daysUntil(couple.ceremonyDate) >= 0 ? `${daysUntil(couple.ceremonyDate)}d away` : daysUntil(couple.ceremonyDate) !== null ? 'past' : ''}</div>}
+        </div>
+        <div style={{display:'flex',gap:2,justifyContent:'flex-end',alignItems:'center'}}>
+          <button className="icon-btn" onClick={e=>{e.stopPropagation();onEdit();}} title="Edit">✎</button>
+          <button className="icon-btn danger" onClick={e=>{e.stopPropagation();onDelete();}} title="Delete">✕</button>
+        </div>
+      </div>
+      {expanded && (
+        <div className="expand-row">
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
+            <div>
+              <div className="detail-field-label">Email</div>
+              <div className="detail-field-value">{couple.email || '—'}</div>
+            </div>
+            <div>
+              <div className="detail-field-label">Phone</div>
+              <div className="detail-field-value">{couple.phone || '—'}</div>
+            </div>
+            <div>
+              <div className="detail-field-label">Guests</div>
+              <div className="detail-field-value">{couple.guestCount || '—'}</div>
+            </div>
+            <div>
+              <div className="detail-field-label">Quoted</div>
+              <div className="detail-field-value">{couple.quoted ? `$${couple.quoted}` : '—'}</div>
+            </div>
+            <div>
+              <div className="detail-field-label">Deposit / Paid</div>
+              <div className="detail-field-value">{couple.depositPaid === 'P' ? '✅ Paid in Full' : couple.depositPaid === 'D' ? '🟡 Deposit' : '—'}</div>
+            </div>
+            <div>
+              <div className="detail-field-label">Platform</div>
+              <div className="detail-field-value">{couple.platform}</div>
+            </div>
+          </div>
+          <hr className="divider" />
+          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+            {[
+              ['Questionnaire Sent', couple.questionnaireSent],
+              ['Questionnaire Returned', couple.questionnaireReturned],
+              ['Consult Completed', couple.consultCompleted],
+              ['Script Started', couple.scriptStart],
+              ['Script Complete', couple.scriptComplete],
+              ['Script Printed', couple.scriptPrinted],
+              ['Review Sent', couple.reviewRequestSent],
+            ].map(([label, val]) => (
+              <div className="check-item" key={label}>
+                <CheckDot yes={val} />
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+          {couple.notes && <div style={{marginTop:10,fontSize:12.5,color:'var(--ink-mid)',fontStyle:'italic'}}>{couple.notes}</div>}
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─── COUPLE FORM ─────────────────────────────────────────────────────────────
+
+const BLANK_COUPLE = {
+  couple:'', email:'', phone:'', ceremonyDate:'', platform:'', package:'', location:'',
+  nextAction:'', status:'Pending', notes:'', quoted:'', guestCount:'', depositPaid:'',
+  questionnaireSent:false, questionnaireReturned:false, consultCompleted:false,
+  scriptStart:false, scriptComplete:false, scriptPrinted:false, reviewRequestSent:false,
+  dateReceived: today(),
+};
+
+function CoupleModal({ couple, onSave, onClose }) {
+  const [form, setForm] = useState(couple ? {...couple} : {...BLANK_COUPLE});
+  const set = (k,v) => setForm(f=>({...f,[k]:v}));
+
+  return (
+    <div className="overlay" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()}>
+        <div className="modal-title">{couple ? 'Edit Couple' : 'Add New Couple'}</div>
+        <div className="form-grid">
+          <div>
+            <label className="input-label">Couple Names</label>
+            <input className="input" value={form.couple} onChange={e=>set('couple',e.target.value)} placeholder="e.g. Darby & Hayden" />
+          </div>
+          <div className="form-row form-row-2">
+            <div>
+              <label className="input-label">Status</label>
+              <select className="input" value={form.status} onChange={e=>set('status',e.target.value)}>
+                {STATUSES.map(s=><option key={s}>{s}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Platform</label>
+              <select className="input" value={form.platform} onChange={e=>set('platform',e.target.value)}>
+                <option value="">Select…</option>
+                {PLATFORMS.map(p=><option key={p}>{p}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row form-row-2">
+            <div>
+              <label className="input-label">Email</label>
+              <input className="input" type="email" value={form.email} onChange={e=>set('email',e.target.value)} />
+            </div>
+            <div>
+              <label className="input-label">Phone</label>
+              <input className="input" value={form.phone} onChange={e=>set('phone',e.target.value)} />
+            </div>
+          </div>
+          <div className="form-row form-row-2">
+            <div>
+              <label className="input-label">Ceremony Date</label>
+              <input className="input" type="date" value={form.ceremonyDate} onChange={e=>set('ceremonyDate',e.target.value)} />
+            </div>
+            <div>
+              <label className="input-label">Package</label>
+              <select className="input" value={form.package} onChange={e=>set('package',e.target.value)}>
+                <option value="">Select…</option>
+                {PACKAGES.map(p=><option key={p}>{p}</option>)}
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="input-label">Location / Venue</label>
+            <input className="input" value={form.location} onChange={e=>set('location',e.target.value)} />
+          </div>
+          <div className="form-row form-row-3">
+            <div>
+              <label className="input-label">Quoted ($)</label>
+              <input className="input" type="number" value={form.quoted} onChange={e=>set('quoted',e.target.value)} />
+            </div>
+            <div>
+              <label className="input-label">Deposit / Paid</label>
+              <select className="input" value={form.depositPaid} onChange={e=>set('depositPaid',e.target.value)}>
+                <option value="">—</option>
+                <option value="D">Deposit</option>
+                <option value="P">Paid in Full</option>
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Guest Count</label>
+              <input className="input" value={form.guestCount} onChange={e=>set('guestCount',e.target.value)} />
+            </div>
+          </div>
+          <div>
+            <label className="input-label">Next Action</label>
+            <select className="input" value={form.nextAction} onChange={e=>set('nextAction',e.target.value)}>
+              <option value="">Select…</option>
+              {STAGES.map(s=><option key={s.stage}>{s.stage}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="input-label" style={{marginBottom:8}}>Checklist</label>
+            <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+              {[
+                ['questionnaireSent','Questionnaire Sent'],
+                ['questionnaireReturned','Questionnaire Returned'],
+                ['consultCompleted','Consult Completed'],
+                ['scriptStart','Script Started'],
+                ['scriptComplete','Script Complete'],
+                ['scriptPrinted','Script Printed'],
+                ['reviewRequestSent','Review Sent'],
+              ].map(([k,label])=>(
+                <label key={k} style={{display:'flex',alignItems:'center',gap:5,fontSize:12,cursor:'pointer',padding:'3px 8px',background:form[k]?'var(--sage-light)':'var(--cream-dark)',borderRadius:12,border:'1px solid',borderColor:form[k]?'var(--sage-dark)':'var(--border)',color:form[k]?'var(--sage-dark)':'var(--ink-mid)'}}>
+                  <input type="checkbox" checked={!!form[k]} onChange={e=>set(k,e.target.checked)} style={{display:'none'}} />
+                  {form[k]?'✓ ':''}{label}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="input-label">Notes</label>
+            <textarea className="input" value={form.notes} onChange={e=>set('notes',e.target.value)} placeholder="Any context or notes…" />
+          </div>
+        </div>
+        <div style={{display:'flex',gap:8,marginTop:22,justifyContent:'flex-end'}}>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" onClick={()=>onSave(form)}>
+            {couple ? 'Save Changes' : 'Add Couple'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── CONFIRM DELETE ───────────────────────────────────────────────────────────
+
+function ConfirmModal({ label, onConfirm, onClose }) {
+  return (
+    <div className="overlay" onClick={onClose}>
+      <div className="modal" style={{maxWidth:360}} onClick={e=>e.stopPropagation()}>
+        <div className="modal-title" style={{fontSize:17,marginBottom:10}}>Remove Couple?</div>
+        <p style={{fontSize:13,color:'var(--ink-mid)',marginBottom:20}}>
+          <strong>{label}</strong> will be permanently removed.
+        </p>
+        <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="btn btn-danger" onClick={onConfirm}>Remove</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── DASHBOARD VIEW ───────────────────────────────────────────────────────────
+
+function DashboardView({ couples, onToggleDone, onEdit, onDelete, onAdd }) {
+  const [expanded, setExpanded] = useState(null);
+  const [filter, setFilter] = useState('all');
+
+  const toggle = id => setExpanded(e => e === id ? null : id);
+
+  const active  = couples.filter(c => c.status === 'Booked');
+  const pending = couples.filter(c => c.status === 'Pending');
+  // "Pending Actions" = has a next action set but status isn't booked, pending, complete, or declined
+  const actions = couples.filter(c => c.status !== 'Booked' && c.status !== 'Pending' && c.status !== 'Complete' && c.status !== 'Declined' && c.nextAction);
+
+  const upcoming30 = couples.filter(c => { const d = daysUntil(c.ceremonyDate); return d !== null && d >= 0 && d <= 30; });
+  const upcoming90 = couples.filter(c => { const d = daysUntil(c.ceremonyDate); return d !== null && d >= 0 && d <= 90; });
+
+  const stages = STAGES.map(s => ({
+    ...s,
+    count: couples.filter(c => c.nextAction === s.stage).length
+  })).filter(s => s.count > 0);
+
+  function renderSection(title, items, accent) {
+    if (items.length === 0) return null;
+    return (
+      <div style={{marginBottom:20}}>
+        <div className="section-header">
+          <div className="section-title" style={{color: accent || 'var(--ink-mid)'}}>{title}</div>
+          <span className="section-count">{items.length}</span>
+        </div>
+        <div className="table-row-header" style={{marginBottom:2}}>
+          <span/>
+          <span className="th">Couple</span>
+          <span className="th">Next Action</span>
+          <span className="th" style={{textAlign:'right'}}>Ceremony</span>
+          <span/>
+        </div>
+        {items.map(c => (
+          <CoupleRow key={c.id} couple={c}
+            onToggleDone={() => onToggleDone(c.id)}
+            onEdit={() => onEdit(c)}
+            onDelete={() => onDelete(c)}
+            expanded={expanded === c.id}
+            onToggleExpand={() => toggle(c.id)}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* Top stats */}
+      <div className="stats-row">
+        <div className="stat-card" style={{borderTopColor:'var(--gold)'}}>
+          <div className="stat-label">Booked</div>
+          <div className="stat-number">{active.length}</div>
+          <div className="stat-sub">Active couples</div>
+        </div>
+        <div className="stat-card" style={{borderTopColor:'var(--rose)'}}>
+          <div className="stat-label">Leads</div>
+          <div className="stat-number">{pending.length}</div>
+          <div className="stat-sub">Pending response</div>
+        </div>
+        <div className="stat-card" style={{borderTopColor:'var(--sage)'}}>
+          <div className="stat-label">Next 30 Days</div>
+          <div className="stat-number">{upcoming30.length}</div>
+          <div className="stat-sub">Upcoming ceremonies</div>
+        </div>
+        <div className="stat-card" style={{borderTopColor:'var(--ink-mid)'}}>
+          <div className="stat-label">Next 90 Days</div>
+          <div className="stat-number">{upcoming90.length}</div>
+          <div className="stat-sub">On the calendar</div>
+        </div>
+      </div>
+
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
+        <div>
+          <h1 className="page-title">Today's View</h1>
+          <p className="page-subtitle">{new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</p>
+        </div>
+        <button className="btn btn-primary" onClick={onAdd}>+ Add Couple</button>
+      </div>
+
+      {renderSection('Active', active, 'var(--gold-dark)')}
+      {renderSection('Pending Leads', pending, 'var(--rose-dark)')}
+      {renderSection('Pending Actions', actions, 'var(--sage-dark)')}
+
+      {couples.length === 0 && (
+        <div className="card empty-state">No couples yet. Add your first one above.</div>
+      )}
+    </div>
+  );
+}
+
+// ─── PIPELINE VIEW ────────────────────────────────────────────────────────────
+
+function PipelineView({ couples, onToggleDone, onEdit, onDelete, onAdd }) {
+  const [expanded, setExpanded] = useState(null);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const toggle = id => setExpanded(e => e === id ? null : id);
+
+  const filtered = useMemo(() => {
+    return couples.filter(c => {
+      const matchSearch = !search || [c.couple,c.email,c.location,c.platform,c.nextAction,c.package].some(f=>(f||'').toLowerCase().includes(search.toLowerCase()));
+      const matchStatus = statusFilter === 'all' || c.status === statusFilter;
+      return matchSearch && matchStatus;
+    }).sort((a,b) => {
+      if (!a.ceremonyDate && !b.ceremonyDate) return 0;
+      if (!a.ceremonyDate) return 1;
+      if (!b.ceremonyDate) return -1;
+      return a.ceremonyDate.localeCompare(b.ceremonyDate);
+    });
+  }, [couples, search, statusFilter]);
+
+  return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
+        <div>
+          <h1 className="page-title">All Couples</h1>
+          <p className="page-subtitle">{couples.length} total records</p>
+        </div>
+        <button className="btn btn-primary" onClick={onAdd}>+ Add Couple</button>
+      </div>
+
+      <div style={{display:'flex',gap:10,marginBottom:16,alignItems:'center',flexWrap:'wrap'}}>
+        <div className="search-wrap" style={{flex:1,minWidth:200}}>
+          <span className="search-icon">🔍</span>
+          <input className="input" style={{paddingLeft:30}} placeholder="Search couples, location, action…" value={search} onChange={e=>setSearch(e.target.value)} />
+        </div>
+        <div className="filter-pills">
+          {['all',...STATUSES].map(s => (
+            <button key={s} className={`filter-pill${statusFilter===s?' active':''}`} onClick={()=>setStatusFilter(s)}>
+              {s === 'all' ? 'All' : s}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="table-row-header" style={{marginBottom:4}}>
+        <span/>
+        <span className="th">Couple</span>
+        <span className="th">Next Action</span>
+        <span className="th" style={{textAlign:'right'}}>Ceremony</span>
+        <span/>
+      </div>
+
+      {filtered.length === 0
+        ? <div className="card empty-state">No results found.</div>
+        : filtered.map(c => (
+          <CoupleRow key={c.id} couple={c}
+            onToggleDone={() => onToggleDone(c.id)}
+            onEdit={() => onEdit(c)}
+            onDelete={() => onDelete(c)}
+            expanded={expanded === c.id}
+            onToggleExpand={() => toggle(c.id)}
+          />
+        ))
+      }
+    </div>
+  );
+}
+
+// ─── STATS VIEW ───────────────────────────────────────────────────────────────
+
+function StatsView({ couples }) {
+  const byStatus = STATUSES.map(s => ({ s, n: couples.filter(c=>c.status===s).length }));
+  const byPlatform = PLATFORMS.map(p => ({ p, n: couples.filter(c=>c.platform===p).length })).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+  const byPackage = PACKAGES.map(p => ({ p, n: couples.filter(c=>c.package===p).length })).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+  const booked = couples.filter(c=>c.status==='Booked');
+  const totalRevenue = booked.reduce((sum,c)=>sum+(Number(c.quoted)||0),0);
+
+  const Bar = ({n, max, color}) => (
+    <div style={{height:6,background:'var(--cream-dark)',borderRadius:3,overflow:'hidden',marginTop:3}}>
+      <div style={{height:'100%',width:`${max?n/max*100:0}%`,background:color,borderRadius:3,transition:'width 0.4s'}} />
+    </div>
+  );
+
+  const maxP = Math.max(...byPlatform.map(x=>x.n), 1);
+  const maxPk = Math.max(...byPackage.map(x=>x.n), 1);
+
+  return (
+    <div>
+      <div style={{marginBottom:20}}>
+        <h1 className="page-title">Stats</h1>
+        <p className="page-subtitle">Overview of your business at a glance</p>
+      </div>
+
+      <div className="stats-row" style={{marginBottom:24}}>
+        <div className="stat-card" style={{borderTopColor:'var(--gold)'}}>
+          <div className="stat-label">Total Revenue</div>
+          <div className="stat-number">${totalRevenue.toLocaleString()}</div>
+          <div className="stat-sub">From booked couples</div>
+        </div>
+        <div className="stat-card" style={{borderTopColor:'var(--sage)'}}>
+          <div className="stat-label">Conversion Rate</div>
+          <div className="stat-number">{couples.length ? Math.round(couples.filter(c=>c.status==='Booked'||c.status==='Complete').length/couples.length*100) : 0}%</div>
+          <div className="stat-sub">Leads to booked/complete</div>
+        </div>
+        <div className="stat-card" style={{borderTopColor:'var(--rose)'}}>
+          <div className="stat-label">Avg. Quoted</div>
+          <div className="stat-number">${booked.length ? Math.round(totalRevenue/booked.length) : 0}</div>
+          <div className="stat-sub">Per booked couple</div>
+        </div>
+        <div className="stat-card" style={{borderTopColor:'var(--ink-mid)'}}>
+          <div className="stat-label">All Time Leads</div>
+          <div className="stat-number">{couples.length}</div>
+          <div className="stat-sub">Total records</div>
+        </div>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
+        <div className="card">
+          <div className="section-label" style={{marginBottom:14}}>By Status</div>
+          {byStatus.map(({s,n}) => (
+            <div key={s} style={{marginBottom:10}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12.5}}>
+                <StatusPill status={s} />
+                <span style={{fontWeight:700,fontSize:13}}>{n}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="section-label" style={{marginBottom:14}}>By Platform</div>
+          {byPlatform.slice(0,8).map(({p,n}) => (
+            <div key={p} style={{marginBottom:9}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12}}>
+                <span>{PLATFORM_EMOJI[p]} {p}</span>
+                <span style={{fontWeight:700}}>{n}</span>
+              </div>
+              <Bar n={n} max={maxP} color="var(--gold)" />
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="section-label" style={{marginBottom:14}}>By Package</div>
+          {byPackage.map(({p,n}) => (
+            <div key={p} style={{marginBottom:9}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12}}>
+                <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:130}}>{p}</span>
+                <span style={{fontWeight:700}}>{n}</span>
+              </div>
+              <Bar n={n} max={maxPk} color="var(--sage)" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── DATA TOOLS ───────────────────────────────────────────────────────────────
+
+function DataToolsView({ couples, onImport }) {
+  const [importText, setImportText] = useState('');
+  const [msg, setMsg] = useState('');
+
+  function doExport() {
+    const json = JSON.stringify(couples, null, 2);
+    const blob = new Blob([json], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `wildstar-crm-${today()}.json`;
+    a.click();
+    setMsg('Exported successfully.');
+  }
+
+  function doImport() {
+    try {
+      const data = JSON.parse(importText);
+      if (!Array.isArray(data)) throw new Error();
+      onImport(data);
+      setImportText('');
+      setMsg(`Imported ${data.length} records.`);
+    } catch {
+      setMsg('Invalid JSON. Please paste valid exported data.');
+    }
+  }
+
+  function copyToClipboard() {
+    navigator.clipboard.writeText(JSON.stringify(couples, null, 2)).then(()=>setMsg('Copied to clipboard.'));
+  }
+
+  function resetToDefault() {
+    if (window.confirm('This will replace your current data with the full dataset from your spreadsheet. Any edits will be lost. Continue?')) {
+      onImport([...SAMPLE_COUPLES]);
+      setMsg('Reset complete. ' + SAMPLE_COUPLES.length + ' records loaded.');
+    }
+  }
+
+  return (
+    <div>
+      <div style={{marginBottom:24}}>
+        <h1 className="page-title">Data & Backup</h1>
+        <p className="page-subtitle">Export your data or import from a backup to sync across devices</p>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+        <div className="card">
+          <div className="section-label" style={{marginBottom:10}}>Export / Backup</div>
+          <p style={{fontSize:12.5,color:'var(--ink-mid)',marginBottom:14,lineHeight:1.6}}>Download your CRM data as a JSON file. Save it to Google Drive or wherever you keep backups. Use it to restore or sync between devices.</p>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+            <button className="btn btn-primary" onClick={doExport}>⬇ Download JSON</button>
+            <button className="btn btn-ghost" onClick={copyToClipboard}>📋 Copy to Clipboard</button>
+          </div>
+          <p style={{fontSize:11,color:'var(--ink-light)',marginTop:10}}>{couples.length} records in current session</p>
+        </div>
+        <div className="card">
+          <div className="section-label" style={{marginBottom:10}}>Import / Restore</div>
+          <p style={{fontSize:12.5,color:'var(--ink-mid)',marginBottom:10,lineHeight:1.6}}>Paste exported JSON to restore from a backup. This replaces your current data.</p>
+          <textarea className="input" style={{minHeight:80,fontFamily:'monospace',fontSize:11}} value={importText} onChange={e=>setImportText(e.target.value)} placeholder='Paste exported JSON here…' />
+          <div style={{marginTop:8}}>
+            <button className="btn btn-gold" onClick={doImport} disabled={!importText.trim()}>⬆ Import Data</button>
+          </div>
+        </div>
+      </div>
+      {msg && (
+        <div className="alert-banner alert-warning" style={{marginTop:16,cursor:'default'}}>
+          {msg} <button className="icon-btn" style={{marginLeft:'auto'}} onClick={()=>setMsg('')}>✕</button>
+        </div>
+      )}
+      <div className="card" style={{marginTop:16}}>
+        <div className="section-label" style={{marginBottom:8}}>How to sync across computers</div>
+        <ol style={{fontSize:12.5,color:'var(--ink-mid)',lineHeight:2,paddingLeft:18}}>
+          <li>Click <strong>Download JSON</strong> on your current computer</li>
+          <li>Save the file to Google Drive (or any cloud storage)</li>
+          <li>On another computer, open this app and paste the file's contents into the Import box</li>
+          <li>Click <strong>Import Data</strong></li>
+        </ol>
+        <p style={{fontSize:12,color:'var(--ink-light)',marginTop:8,fontStyle:'italic'}}>Full Google Drive auto-sync can be wired up later — this gets you cross-device access today.</p>
+      </div>
+      <div className="card" style={{marginTop:16,borderColor:'var(--rose)',background:'var(--rose-light)'}}>
+        <div className="section-label" style={{marginBottom:8,color:'var(--rose-dark)'}}>Reset to Spreadsheet Data</div>
+        <p style={{fontSize:12.5,color:'var(--ink-mid)',marginBottom:12,lineHeight:1.6}}>Replaces all current data with the original 59-record dataset from your Google Sheet. Use this once to load the full history if your browser cached the old version.</p>
+        <button className="btn btn-danger" onClick={resetToDefault}>↺ Reset to Original Data</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── APP ──────────────────────────────────────────────────────────────────────
+
+function App() {
+  const [couples, setCouplesRaw] = useStorage('wildstar_couples', SAMPLE_COUPLES);
+  const [view, setView] = useState('dashboard');
+  const [showModal, setShowModal] = useState(false);
+  const [editCouple, setEditCouple] = useState(null);
+  const [confirmDel, setConfirmDel] = useState(null);
+  const [authToken, setAuthToken] = useState(null);
+  const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | saved | error | loading
+  const [userEmail, setUserEmail] = useState('');
+  const saveTimer = useRef(null);
+
+  // On mount, try silent sign-in
+  useEffect(() => {
+    if (typeof google === 'undefined') return;
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: async (resp) => {
+        if (resp.error || !resp.access_token) return;
+        setAuthToken(resp.access_token);
+        setSyncStatus('loading');
+        try {
+          const data = await loadFromDrive(resp.access_token);
+          if (data && Array.isArray(data)) {
+            setCouplesRaw(data);
+            localStorage.setItem('wildstar_couples', JSON.stringify(data));
+          }
+          // Get user email
+          const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${resp.access_token}` }
+          });
+          const user = await info.json();
+          setUserEmail(user.email || '');
+          setSyncStatus('saved');
+        } catch(e) {
+          setSyncStatus('error');
+        }
+      },
+    });
+    // Silent attempt - won't show popup
+    client.requestAccessToken({ prompt: 'none' });
+  }, []);
+
+  // Auto-save to Drive whenever couples changes (debounced)
+  useEffect(() => {
+    if (!authToken) return;
+    if (syncStatus === 'loading') return;
+    clearTimeout(saveTimer.current);
+    setSyncStatus('syncing');
+    saveTimer.current = setTimeout(async () => {
+      try {
+        await saveToDrive(authToken, couples);
+        setSyncStatus('saved');
+      } catch(e) {
+        setSyncStatus('error');
+      }
+    }, 1500);
+  }, [couples, authToken]);
+
+  function setCouples(updater) {
+    setCouplesRaw(updater);
+  }
+
+  async function signIn() {
+    if (typeof google === 'undefined') { alert('Google API not loaded yet. Please wait a moment and try again.'); return; }
+    setSyncStatus('loading');
+    try {
+      const client = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: async (resp) => {
+          if (resp.error || !resp.access_token) { setSyncStatus('error'); return; }
+          setAuthToken(resp.access_token);
+          try {
+            const data = await loadFromDrive(resp.access_token);
+            if (data && Array.isArray(data) && data.length > 0) {
+              setCouplesRaw(data);
+              localStorage.setItem('wildstar_couples', JSON.stringify(data));
+            } else {
+              // First time -- push current data up to Drive
+              await saveToDrive(resp.access_token, couples);
+            }
+            const info = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+              headers: { Authorization: `Bearer ${resp.access_token}` }
+            });
+            const user = await info.json();
+            setUserEmail(user.email || '');
+            setSyncStatus('saved');
+          } catch(e) { setSyncStatus('error'); }
+        },
+      });
+      client.requestAccessToken({ prompt: 'consent' });
+    } catch(e) { setSyncStatus('error'); }
+  }
+
+  function signOut() {
+    if (authToken) google.accounts.oauth2.revoke(authToken);
+    setAuthToken(null);
+    setUserEmail('');
+    setSyncStatus('idle');
+  }
+
+  function openAdd() { setEditCouple(null); setShowModal(true); }
+  function openEdit(c) { setEditCouple(c); setShowModal(true); }
+
+  function saveCouple(form) {
+    const resolved = form.reviewRequestSent ? {...form, status: 'Complete'} : form;
+    if (editCouple) {
+      setCouples(prev => prev.map(c => c.id === editCouple.id ? {...c,...resolved} : c));
+    } else {
+      setCouples(prev => [...prev, {...resolved, id: uid()}]);
+    }
+    setShowModal(false);
+  }
+
+  function toggleDone(id) {
+    setCouples(prev => prev.map(c => c.id === id ? {...c, status: c.status === 'Complete' ? 'Booked' : 'Complete'} : c));
+  }
+
+  function deleteCouple(id) {
+    setCouples(prev => prev.filter(c => c.id !== id));
+    setConfirmDel(null);
+  }
+
+  const syncLabel = {
+    idle: null,
+    loading: '⟳ Loading…',
+    syncing: '⟳ Saving…',
+    saved: '✓ Synced',
+    error: '⚠ Sync error',
+  }[syncStatus];
+
+  const syncColor = {
+    idle: 'transparent',
+    loading: 'var(--gold)',
+    syncing: 'var(--gold)',
+    saved: 'var(--sage)',
+    error: 'var(--rose-dark)',
+  }[syncStatus];
+
+  const VIEWS = [['dashboard','Dashboard'],['pipeline','All Couples'],['stats','Stats'],['data','Data']];
+
+  return (
+    <div>
+      <header>
+        <div className="header-inner">
+          <div className="wordmark">
+            <span className="wordmark-title">Wildstar Weddings</span>
+            <span className="wordmark-sub">CRM</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:16}}>
+            <nav>
+              {VIEWS.map(([v,l]) => (
+                <button key={v} className={`nav-btn${view===v?' active':''}`} onClick={()=>setView(v)}>{l}</button>
+              ))}
+            </nav>
+            <div style={{display:'flex',alignItems:'center',gap:8,borderLeft:'1px solid rgba(255,255,255,0.1)',paddingLeft:16}}>
+              {syncLabel && (
+                <span style={{fontSize:10,fontWeight:700,letterSpacing:'0.08em',color:syncColor,fontFamily:'Raleway,sans-serif',textTransform:'uppercase'}}>{syncLabel}</span>
+              )}
+              {authToken ? (
+                <div style={{display:'flex',alignItems:'center',gap:6}}>
+                  <span style={{fontSize:10,color:'#9AA0A0',fontFamily:'Raleway,sans-serif'}}>{userEmail}</span>
+                  <button className="nav-btn" style={{padding:'4px 8px',fontSize:10}} onClick={signOut}>Sign out</button>
+                </div>
+              ) : (
+                <button className="nav-btn" style={{background:'rgba(209,166,90,0.15)',color:'var(--gold)',border:'1px solid rgba(209,166,90,0.3)',padding:'5px 12px',fontSize:10}} onClick={signIn}>
+                  ☁ Connect Google Drive
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+      <main>
+        {view === 'dashboard' && <DashboardView couples={couples.filter(c=>c.status!=='Declined')} onToggleDone={toggleDone} onEdit={openEdit} onDelete={c=>setConfirmDel(c)} onAdd={openAdd} />}
+        {view === 'pipeline'  && <PipelineView  couples={couples} onToggleDone={toggleDone} onEdit={openEdit} onDelete={c=>setConfirmDel(c)} onAdd={openAdd} />}
+        {view === 'stats'     && <StatsView couples={couples} />}
+        {view === 'data'      && <DataToolsView couples={couples} onImport={setCouples} />}
+      </main>
+
+      {showModal && <CoupleModal couple={editCouple} onSave={saveCouple} onClose={()=>setShowModal(false)} />}
+      {confirmDel && (
+        <ConfirmModal
+          label={confirmDel.couple}
+          onConfirm={() => deleteCouple(confirmDel.id)}
+          onClose={() => setConfirmDel(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
