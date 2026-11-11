@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bluestem Systems — Operations & Documentation for Small Businesses</title>
-  <meta name="description" content="Bluestem Systems builds the systems and writes the documents small businesses need but never have time to create.">
+  <title>Bluestem | Launch Your Small Business, Documented</title>
+  <meta name="description" content="I build the documents and systems new small businesses need to open: pricing, agreements, intake forms, invoicing, a launch checklist. New Braunfels, TX.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
@@ -28,7 +28,7 @@
     body { font-family: var(--serif); background: var(--cream); color: var(--text-dark); line-height: 1.7; min-height: 100vh; }
     .wrap { max-width: 680px; margin: 0 auto; padding: 0 1.5rem; }
 
-    /* NAV — always one line */
+    /* NAV, always one line */
     nav { padding: 1.25rem 0; border-bottom: 0.5px solid var(--border); margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: nowrap; }
     .wordmark { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-primary); text-decoration: none; white-space: nowrap; }
     .nav-links { list-style: none; display: flex; gap: 1.25rem; flex-shrink: 0; }
@@ -39,7 +39,10 @@
     .hero { margin-bottom: 3.5rem; padding: 2rem 0 0; }
     .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); margin-bottom: 1.1rem; }
     h1 { font-family: var(--serif); font-size: clamp(24px, 5vw, 32px); font-weight: 700; line-height: 1.25; margin-bottom: 1.25rem; max-width: 560px; color: var(--blue-primary); }
-    .subhead { font-size: 16px; font-style: italic; color: var(--text-mid); line-height: 1.75; max-width: 480px; margin-bottom: 2rem; }
+    .subhead { font-size: 16px; font-style: italic; color: var(--text-mid); line-height: 1.75; max-width: 480px; margin-bottom: 1.25rem; }
+    .hero-body { font-size: 15px; color: var(--text-dark); line-height: 1.8; max-width: 520px; margin-bottom: 1rem; }
+    .hero-body:last-of-type { margin-bottom: 2rem; }
+    .cta-note { font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em; color: var(--text-light); margin-top: 0.9rem; max-width: 420px; line-height: 1.6; }
 
     /* BUTTON */
     .cta-btn { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); background: var(--russet); border: none; padding: 13px 26px; text-decoration: none; transition: opacity 0.15s; cursor: pointer; }
@@ -48,22 +51,38 @@
 
     .rule { border: none; border-top: 0.5px solid var(--border); margin: 3rem 0; }
     .section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 1.75rem; }
+    .group-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--text-light); margin: 2.5rem 0 0.75rem; }
 
     /* SERVICES */
     .service { display: grid; grid-template-columns: 1fr auto; gap: 1.25rem; align-items: start; padding: 1.5rem 0; border-bottom: 0.5px solid var(--border); }
-    .service:first-of-type { border-top: 0.5px solid var(--border); }
+    .service-group .service:first-of-type { border-top: 0.5px solid var(--border); }
     .service-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--blue-mid); margin-bottom: 0.35rem; opacity: 0.8; }
     .service-name { font-size: 17px; font-weight: 700; margin-bottom: 0.5rem; color: var(--blue-primary); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--russet); padding: 2px 7px; color: var(--white); font-weight: 400; white-space: nowrap; opacity: 0.9; }
     .service-desc { font-size: 14px; font-style: italic; color: var(--text-mid); line-height: 1.65; margin-bottom: 0.5rem; }
     .service-includes { font-family: var(--mono); font-size: 10px; color: var(--text-light); letter-spacing: 0.02em; }
+    .service-includes + .service-includes { margin-top: 0.25rem; }
     .service-price { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--blue-primary); white-space: nowrap; padding-top: 1.6rem; }
+
+    /* HOW IT WORKS */
+    .steps { list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 1.25rem; }
+    .steps li { counter-increment: step; display: grid; grid-template-columns: 2rem 1fr; gap: 0.75rem; align-items: baseline; }
+    .steps li::before { content: counter(step); font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--russet); }
+    .step-name { font-weight: 700; color: var(--blue-primary); }
+    .step-desc { font-size: 15px; font-style: italic; color: var(--text-mid); }
+
+    /* PROOF */
+    .proof-item { padding: 1.25rem 0; border-bottom: 0.5px solid var(--border); }
+    .proof-item:first-of-type { border-top: 0.5px solid var(--border); }
+    .proof-name { font-size: 16px; font-weight: 700; color: var(--blue-primary); margin-bottom: 0.35rem; }
+    .proof-desc { font-size: 14px; font-style: italic; color: var(--text-mid); line-height: 1.65; }
 
     /* ABOUT */
     .about p { font-size: 15px; font-style: italic; color: var(--text-mid); line-height: 1.85; max-width: 500px; }
 
     /* CONTACT */
     .contact-intro { font-size: 15px; font-style: italic; color: var(--text-mid); margin-bottom: 2rem; line-height: 1.75; }
+    .contact-intro a { color: var(--blue-mid); }
     .form-row { margin-bottom: 1.1rem; }
     label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 0.35rem; }
     input, textarea, select { width: 100%; font-family: var(--serif); font-size: 15px; color: var(--text-dark); background: var(--blue-light); border: 0.5px solid var(--border); padding: 10px 12px; outline: none; transition: border-color 0.15s, background 0.15s; appearance: none; border-radius: 0; }
@@ -104,61 +123,125 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
+
   <section class="hero">
-    <p class="eyebrow">Operations. Documented. Simplified.</p>
-    <h1><span class="grass-mark"></span>Builds the systems and writes the documents small businesses need but never have time to create.</h1>
-    <p class="subhead">Bluestem Systems helps small business owners simplify how they operate, so the work that matters stops getting buried.</p>
-    <a href="#contact" class="cta-btn">Get in touch ↗</a>
+    <p class="eyebrow">Launched. Documented. Simplified.</p>
+    <h1><span class="grass-mark"></span>You bring the skill. I build the business around it.</h1>
+    <p class="subhead">The last business I launched needed about 30 documents. Thirteen of them had to exist before the first customer.</p>
+    <p class="hero-body">Most owners find those out one at a time, usually when a customer asks. You guess at pricing, shake hands instead of signing, and keep customer details in a notes app.</p>
+    <p class="hero-body">I hand you the other version: a price sheet you can defend, an agreement every customer signs, an intake form that builds your customer list, and a tracker showing what's filed and what's next. Built once, used on every job.</p>
+    <a href="https://calendar.app.google/LVep9i5S7BUQXkRG9" class="cta-btn" target="_blank" rel="noopener">Book my Launch Snapshot ↗</a>
+    <p class="cta-note">Free, 30 minutes. You'll leave knowing what to file first and what can wait. No prep needed.</p>
   </section>
+
   <hr class="rule">
+
   <section id="services">
     <p class="section-label">Services</p>
-    <div class="service">
-      <div>
-        <p class="service-tag">Start here</p>
-        <p class="service-name">The Operations Audit <span class="badge">recommended</span></p>
-        <p class="service-desc">A focused look at how your business currently runs. We identify your three biggest friction points and deliver a prioritized written action plan so you know exactly what to fix and in what order.</p>
-        <p class="service-includes">Written report + one hour debrief call</p>
+    <div class="service-group">
+      <div class="service">
+        <div>
+          <p class="service-tag">Start here</p>
+          <p class="service-name">Launch Snapshot</p>
+          <p class="service-desc">Thirty minutes on a call. You tell me what you're starting; I tell you what to file first, what can wait, and the biggest risk to watch.</p>
+          <p class="service-includes">One call, one clear answer</p>
+        </div>
+        <div class="service-price">Free</div>
       </div>
-      <div class="service-price">$200</div>
+      <div class="service">
+        <div>
+          <p class="service-tag">Plan</p>
+          <p class="service-name">Launch Roadmap <span class="badge">recommended</span></p>
+          <p class="service-desc">A written plan for your launch: what to file, which documents you need, which tools to use and in what order.</p>
+          <p class="service-includes">Written roadmap + one hour walkthrough call</p>
+        </div>
+        <div class="service-price">$200</div>
+      </div>
+      <div class="service">
+        <div>
+          <p class="service-tag">Build</p>
+          <p class="service-name">Launch Kit</p>
+          <p class="service-desc">The documents your business runs on, written for your business: price sheet, service agreement, intake form, invoice and a tracker for everything else. Standard and Complete add the forms, sheets and tools, set up and ready.</p>
+          <p class="service-includes">Essentials $500 &nbsp;·&nbsp; Standard $750 &nbsp;·&nbsp; Complete $1,200</p>
+          <p class="service-includes">Agreements are templates for your attorney to review</p>
+        </div>
+        <div class="service-price">from $500</div>
+      </div>
     </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Documentation</p>
-        <p class="service-name">The Starter Handbook</p>
-        <p class="service-desc">Your business's first real employee handbook. Policies, expectations, onboarding basics, and the things that currently live only in your head — written down and ready to use.</p>
-        <p class="service-includes">Complete document, formatted and ready to hand to your team</p>
+
+    <p class="group-label">After launch</p>
+    <div class="service-group">
+      <div class="service">
+        <div>
+          <p class="service-tag">Process writing</p>
+          <p class="service-name">The SOP Sprint</p>
+          <p class="service-desc">Document your first repeatable process before you hire. You walk me through how it actually works and I write a step-by-step document someone else can follow without you in the room.</p>
+          <p class="service-includes">One polished SOP document</p>
+        </div>
+        <div class="service-price">from $175</div>
       </div>
-      <div class="service-price">$500</div>
-    </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Process writing</p>
-        <p class="service-name">The SOP Sprint</p>
-        <p class="service-desc">One messy process, made clean. We map how it actually works and I write a repeatable step-by-step document your team can follow without you in the room.</p>
-        <p class="service-includes">One polished SOP document</p>
+      <div class="service">
+        <div>
+          <p class="service-tag">Documentation</p>
+          <p class="service-name">First Hire Handbook</p>
+          <p class="service-desc">For when employee one starts. Policies, expectations, onboarding basics, and the things that currently live only in your head, written down and ready to use.</p>
+          <p class="service-includes">Complete document, formatted and ready to hand to your team</p>
+        </div>
+        <div class="service-price">$500</div>
       </div>
-      <div class="service-price">$175</div>
-    </div>
-    <div class="service">
-      <div>
-        <p class="service-tag">Automation</p>
-        <p class="service-name">Systems Setup</p>
-        <p class="service-desc">You've got the tools, they're just not talking to each other. I'll connect and configure your existing platforms so your workflow actually flows.</p>
-        <p class="service-includes">Setup, testing, and a short walkthrough doc</p>
+      <div class="service">
+        <div>
+          <p class="service-tag">Automation</p>
+          <p class="service-name">Systems Setup</p>
+          <p class="service-desc">You just signed up for a pile of tools, and they're not talking to each other. I'll connect and configure them so your workflow actually flows.</p>
+          <p class="service-includes">Setup, testing, and a short walkthrough doc</p>
+        </div>
+        <div class="service-price">from $150</div>
       </div>
-      <div class="service-price">from $150</div>
     </div>
   </section>
+
   <hr class="rule">
+
+  <section id="how">
+    <p class="section-label">How it works</p>
+    <ol class="steps">
+      <li><div><p class="step-name">Snapshot call</p><p class="step-desc">Thirty minutes, free. You tell me what you're starting; I tell you what to do first.</p></div></li>
+      <li><div><p class="step-name">Build</p><p class="step-desc">I write and set up your documents while you get ready to open.</p></div></li>
+      <li><div><p class="step-name">Open</p><p class="step-desc">You get everything in one packet, organized by what to use first.</p></div></li>
+    </ol>
+  </section>
+
+  <hr class="rule">
+
+  <section id="work">
+    <p class="section-label">Businesses I've built</p>
+    <div class="proof-item">
+      <p class="proof-name">Rux Pool Cleaning</p>
+      <p class="proof-desc">A Hill Country pool service I co-own. It went from a name to a price sheet, partnership terms, customer agreements, intake form, visit log and invoice in about two weeks.</p>
+    </div>
+    <div class="proof-item">
+      <p class="proof-name">Wildstar Weddings</p>
+      <p class="proof-desc">My own officiant business: pricing, a client CRM, a vetted-officiant model that runs ceremonies without me there, and a course for other wedding pros.</p>
+    </div>
+    <div class="proof-item">
+      <p class="proof-name">Miles Walker Art</p>
+      <p class="proof-desc">An artist's website and shop at miles2walk.com, with services, catalog and merch in one place.</p>
+    </div>
+  </section>
+
+  <hr class="rule">
+
   <section id="about" class="about">
     <p class="section-label">About</p>
-    <p>Bluestem Systems is a one-person operation based in Central Texas. I work with small business owners who are good at what they do and overwhelmed by everything else — helping them get out from under their own paperwork so they can get back to the work they actually built the thing for.</p>
+    <p>Bluestem is Wren Willett, based in New Braunfels. I spent years building operations and people processes at a tech company, hold a QuickBooks certification, and have run my own service business for years. Now I build the backend for people starting theirs.</p>
   </section>
+
   <hr class="rule">
+
   <section id="contact">
     <p class="section-label">Contact</p>
-    <p class="contact-intro">Not sure which service fits? Start with the audit. Or just reach out and describe what's not working — we'll figure it out from there.</p>
+    <p class="contact-intro">Not sure which service fits? <a href="https://calendar.app.google/LVep9i5S7BUQXkRG9" target="_blank" rel="noopener">Book a free Launch Snapshot</a>, or tell me what you're starting below and I'll get back to you.</p>
     <form id="contact-form" action="https://formspree.io/f/xvzdezeg" method="POST">
       <div class="form-row">
         <label for="name">Name</label>
@@ -169,29 +252,31 @@
         <input type="email" id="email" name="email" required autocomplete="email">
       </div>
       <div class="form-row">
-        <label for="business">Business name (optional)</label>
+        <label for="business">Business name (optional, or what you're calling it)</label>
         <input type="text" id="business" name="business">
       </div>
       <div class="form-row">
         <label for="service">What sounds most useful?</label>
         <select id="service" name="service">
-          <option value="">— not sure yet —</option>
-          <option value="audit">The Operations Audit ($200)</option>
-          <option value="handbook">The Starter Handbook ($500)</option>
-          <option value="sop">The SOP Sprint ($175)</option>
-          <option value="systems">Systems Setup (from $250)</option>
+          <option value="">Not sure yet</option>
+          <option value="snapshot">Launch Snapshot (free)</option>
+          <option value="roadmap">Launch Roadmap ($200)</option>
+          <option value="kit">Launch Kit (from $500)</option>
+          <option value="sop">The SOP Sprint (from $175)</option>
+          <option value="handbook">First Hire Handbook ($500)</option>
+          <option value="systems">Systems Setup (from $150)</option>
           <option value="other">Something else</option>
         </select>
       </div>
       <div class="form-row">
-        <label for="message">What's going on?</label>
-        <textarea id="message" name="message" placeholder="Describe what's overwhelming you or what you're trying to fix."></textarea>
+        <label for="message">What are you starting?</label>
+        <textarea id="message" name="message" placeholder="Tell me about the business and where you are with it."></textarea>
       </div>
       <div class="form-submit">
         <button type="submit" id="submit-btn" class="cta-btn">Send it ↗</button>
       </div>
-      <p class="form-success" id="form-success">Got it — I'll be in touch soon.</p>
-      <p class="form-error" id="form-error">Something went wrong. Try emailing directly at contact@bluestem.systems.</p>
+      <p class="form-success" id="form-success">Got it. I'll be in touch soon.</p>
+      <p class="form-error" id="form-error">Something went wrong. Email me directly at contactbluestem@gmail.com.</p>
     </form>
     <script>
       const form = document.getElementById('contact-form');
@@ -223,9 +308,10 @@
       });
     </script>
   </section>
+
   <footer>
-    <span class="footer-word">Bluestem Systems</span>
-    <span class="footer-loc">Central Texas &nbsp;·&nbsp; bluestem.systems</span>
+    <span class="footer-word">Launched. Documented. Simplified.</span>
+    <span class="footer-loc">New Braunfels, TX &nbsp;·&nbsp; bluestem.systems</span>
   </footer>
 </div>
 </body>
